@@ -1,0 +1,106 @@
+\contentsline {section}{\numberline {1}Introduction}{4}{section.1}%
+\contentsline {subsection}{\numberline {1.1}From Static Models to Agentic Systems}{4}{subsection.1.1}%
+\contentsline {subsection}{\numberline {1.2}The Theory-Practice Gap in Agentic RL}{4}{subsection.1.2}%
+\contentsline {subsection}{\numberline {1.3}The Critical Role of RL Environments}{4}{subsection.1.3}%
+\contentsline {subsection}{\numberline {1.4}Key Challenges in Agentic RL Training}{5}{subsection.1.4}%
+\contentsline {subsection}{\numberline {1.5}Contributions and Paper Structure}{5}{subsection.1.5}%
+\contentsline {section}{\numberline {2} Theoretical Framework: From LLM-RL to Agentic RL}{6}{section.2}%
+\contentsline {subsection}{\numberline {2.1}MDP vs. POMDP Formalism}{6}{subsection.2.1}%
+\contentsline {subsubsection}{\numberline {2.1.1}Conventional LLM-RL: The Degenerate MDP}{6}{subsubsection.2.1.1}%
+\contentsline {subsubsection}{\numberline {2.1.2}Agentic RL: The POMDP Formulation}{7}{subsubsection.2.1.2}%
+\contentsline {subsubsection}{\numberline {2.1.3}State Space: Environment State and Agent Memory}{7}{subsubsection.2.1.3}%
+\contentsline {subsubsection}{\numberline {2.1.4}Partial Observability and the Observation Function}{8}{subsubsection.2.1.4}%
+\contentsline {subsection}{\numberline {2.2}Expanded Action Spaces (ExpA)}{9}{subsection.2.2}%
+\contentsline {subsubsection}{\numberline {2.2.1}Decoupling Reasoning from Action}{9}{subsubsection.2.2.1}%
+\contentsline {subsubsection}{\numberline {2.2.2}Routing Actions and Environment Selection}{10}{subsubsection.2.2.2}%
+\contentsline {subsubsection}{\numberline {2.2.3}Theoretical Implications of ExpA}{10}{subsubsection.2.2.3}%
+\contentsline {subsubsection}{\numberline {2.2.4}Comparison with Traditional LLM-RL}{10}{subsubsection.2.2.4}%
+\contentsline {section}{\numberline {3}Taxonomy of Agentic Capabilities and Task Domains}{11}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Core Agentic Capabilities}{11}{subsection.3.1}%
+\contentsline {subsubsection}{\numberline {3.1.1}Planning}{11}{subsubsection.3.1.1}%
+\contentsline {subsubsection}{\numberline {3.1.2}Tool Use}{12}{subsubsection.3.1.2}%
+\contentsline {subsubsection}{\numberline {3.1.3}Memory}{12}{subsubsection.3.1.3}%
+\contentsline {subsubsection}{\numberline {3.1.4}Self-Improvement}{12}{subsubsection.3.1.4}%
+\contentsline {subsubsection}{\numberline {3.1.5}Reasoning}{12}{subsubsection.3.1.5}%
+\contentsline {subsection}{\numberline {3.2}Task Domains}{13}{subsection.3.2}%
+\contentsline {subsubsection}{\numberline {3.2.1}Software Engineering}{13}{subsubsection.3.2.1}%
+\contentsline {subsubsection}{\numberline {3.2.2}Mathematical Reasoning}{13}{subsubsection.3.2.2}%
+\contentsline {subsubsection}{\numberline {3.2.3}Web and GUI Interaction}{13}{subsubsection.3.2.3}%
+\contentsline {subsection}{\numberline {3.3}Capability-Domain Classification Matrix}{13}{subsection.3.3}%
+\contentsline {subsection}{\numberline {3.4}Concrete Examples}{14}{subsection.3.4}%
+\contentsline {section}{\numberline {4}Packages, Protocols, and Development Frameworks}{15}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Environment and Interface Frameworks}{15}{subsection.4.1}%
+\contentsline {subsubsection}{\numberline {4.1.1}OpenEnv (Meta/HuggingFace)}{16}{subsubsection.4.1.1}%
+\contentsline {subsubsection}{\numberline {4.1.2}GEM (General Experience Maker)}{17}{subsubsection.4.1.2}%
+\contentsline {subsubsection}{\numberline {4.1.3}Model Context Protocol (MCP) - Anthropic}{17}{subsubsection.4.1.3}%
+\contentsline {subsection}{\numberline {4.2}RL Training and Orchestration Libraries}{18}{subsection.4.2}%
+\contentsline {subsubsection}{\numberline {4.2.1}Agent-Lightning (Microsoft Research)}{19}{subsubsection.4.2.1}%
+\contentsline {subsubsection}{\numberline {4.2.2}NVIDIA NeMo Gym and NeMo RL}{20}{subsubsection.4.2.2}%
+\contentsline {subsubsection}{\numberline {4.2.3}ProRL Agent (NVIDIA/NeMo)}{20}{subsubsection.4.2.3}%
+\contentsline {subsubsection}{\numberline {4.2.4}OpenAI Agents SDK}{21}{subsubsection.4.2.4}%
+\contentsline {subsubsection}{\numberline {4.2.5}SkyRL-Agent, VeRL-Tool, and rLLM}{22}{subsubsection.4.2.5}%
+\contentsline {subsection}{\numberline {4.3}Integration Patterns and Best Practices}{22}{subsection.4.3}%
+\contentsline {subsection}{\numberline {4.4}Summary}{23}{subsection.4.4}%
+\contentsline {section}{\numberline {5} State-of-the-Art Agentic Reasoning Models}{23}{section.5}%
+\contentsline {subsection}{\numberline {5.1}Kimi K2.5: The Agent Swarm Paradigm}{23}{subsection.5.1}%
+\contentsline {subsubsection}{\numberline {5.1.1}The PARL Framework}{23}{subsubsection.5.1.1}%
+\contentsline {subsubsection}{\numberline {5.1.2}Technical Specifications}{24}{subsubsection.5.1.2}%
+\contentsline {subsubsection}{\numberline {5.1.3}Zero-Vision SFT}{24}{subsubsection.5.1.3}%
+\contentsline {subsection}{\numberline {5.2}OpenClaw: The Operating System of Agents}{24}{subsection.5.2}%
+\contentsline {subsubsection}{\numberline {5.2.1}Architecture Overview}{24}{subsubsection.5.2.1}%
+\contentsline {subsubsection}{\numberline {5.2.2}Representative Enterprise Deployment Stack}{24}{subsubsection.5.2.2}%
+\contentsline {subsubsection}{\numberline {5.2.3}Plugin SDK and Extensibility}{25}{subsubsection.5.2.3}%
+\contentsline {subsection}{\numberline {5.3}Claude Code and OpenAI Operator: Direct Action Interfaces}{25}{subsection.5.3}%
+\contentsline {subsubsection}{\numberline {5.3.1}Claude Code: Terminal-Native Agentics}{25}{subsubsection.5.3.1}%
+\contentsline {subsubsection}{\numberline {5.3.2}OpenAI Operator: GUI Navigation Agent}{25}{subsubsection.5.3.2}%
+\contentsline {subsection}{\numberline {5.4}Comparative Analysis}{25}{subsection.5.4}%
+\contentsline {subsubsection}{\numberline {5.4.1}Table 1: Core Architecture Comparison}{26}{subsubsection.5.4.1}%
+\contentsline {subsubsection}{\numberline {5.4.2}Table 2: Technical Capabilities Matrix}{26}{subsubsection.5.4.2}%
+\contentsline {subsubsection}{\numberline {5.4.3}Table 3: Use Case Alignment}{26}{subsubsection.5.4.3}%
+\contentsline {subsection}{\numberline {5.5}Architectural Implications}{26}{subsection.5.5}%
+\contentsline {section}{\numberline {6}RL Environments for Embodied AI}{27}{section.6}%
+\contentsline {subsection}{\numberline {6.1}Simulation and World Models}{27}{subsection.6.1}%
+\contentsline {subsection}{\numberline {6.2}Physical AI: GR00t, Alpamayo, and Newton}{27}{subsection.6.2}%
+\contentsline {subsection}{\numberline {6.3}Perception and Situational Awareness}{28}{subsection.6.3}%
+\contentsline {subsection}{\numberline {6.4}Connection to Broader Agentic RL Framework}{28}{subsection.6.4}%
+\contentsline {section}{\numberline {7} Synthetic Environment Generation: Overcoming Data Scarcity}{29}{section.7}%
+\contentsline {subsection}{\numberline {7.1}Agent World Model (AWM): The Five-Step Synthetic Pipeline}{29}{subsection.7.1}%
+\contentsline {subsection}{\numberline {7.2}Reasoning Gym (RG): Procedural Tasks and Curriculum Learning}{30}{subsection.7.2}%
+\contentsline {subsection}{\numberline {7.3}Solving the Dataset Ceiling Problem}{30}{subsection.7.3}%
+\contentsline {subsection}{\numberline {7.4}Comparative Analysis: SQL-Backed vs. LLM-Simulated Environments}{31}{subsection.7.4}%
+\contentsline {section}{\numberline {8} Algorithmic Advancements and Credit Assignment}{32}{section.8}%
+\contentsline {subsection}{\numberline {8.1}The Credit Assignment Problem in Long-Horizon Tasks}{32}{subsection.8.1}%
+\contentsline {subsection}{\numberline {8.2}Group Relative Policy Optimization (GRPO)}{33}{subsection.8.2}%
+\contentsline {subsubsection}{\numberline {8.2.1}Mathematical Formulation}{33}{subsubsection.8.2.1}%
+\contentsline {subsubsection}{\numberline {8.2.2}Advantages of Critic-Free Design}{33}{subsubsection.8.2.2}%
+\contentsline {subsection}{\numberline {8.3}Hierarchical Group Policy Optimization (HGPO)}{33}{subsection.8.3}%
+\contentsline {subsubsection}{\numberline {8.3.1}Hierarchical Group Advantage}{33}{subsubsection.8.3.1}%
+\contentsline {subsection}{\numberline {8.4}Hindsight Credit Assignment with LLM-as-Critic (HCAPO)}{34}{subsection.8.4}%
+\contentsline {subsubsection}{\numberline {8.4.1}LLM-as-Critic Mechanism}{34}{subsubsection.8.4.1}%
+\contentsline {subsubsection}{\numberline {8.4.2}Hindsight Advantage Estimation}{34}{subsubsection.8.4.2}%
+\contentsline {subsection}{\numberline {8.5}SHADOW: Dynamics-Aware State Grouping}{34}{subsection.8.5}%
+\contentsline {subsubsection}{\numberline {8.5.1}Dynamics-Aware Grouping}{34}{subsubsection.8.5.1}%
+\contentsline {subsubsection}{\numberline {8.5.2}State Representation Learning}{34}{subsubsection.8.5.2}%
+\contentsline {subsection}{\numberline {8.6}Algorithm Comparison}{35}{subsection.8.6}%
+\contentsline {subsection}{\numberline {8.7}Practical Considerations and Implementation}{35}{subsection.8.7}%
+\contentsline {section}{\numberline {9}The Sim-to-Real Gap in User Simulation}{36}{section.9}%
+\contentsline {subsection}{\numberline {9.1}The User-Sim Index: Quantifying the Reality Gap}{36}{subsection.9.1}%
+\contentsline {subsection}{\numberline {9.2}The Behavioral Gap: Excessive Cooperativeness in Simulation}{36}{subsection.9.2}%
+\contentsline {subsection}{\numberline {9.3}The Evaluative Gap: Simulated vs. Real Human Feedback}{37}{subsection.9.3}%
+\contentsline {subsection}{\numberline {9.4}Implications for Training and Evaluation}{37}{subsection.9.4}%
+\contentsline {subsection}{\numberline {9.5}Connection to Production Deployment}{38}{subsection.9.5}%
+\contentsline {section}{\numberline {10}Evaluation and Production Readiness}{38}{section.10}%
+\contentsline {subsection}{\numberline {10.1}The CLASSic Framework: Holistic Production Assessment}{38}{subsection.10.1}%
+\contentsline {subsection}{\numberline {10.2}The CLEAR Framework: Bridging the Production Gap}{39}{subsection.10.2}%
+\contentsline {subsection}{\numberline {10.3}Four Dimensions of Reliability}{40}{subsection.10.3}%
+\contentsline {subsubsection}{\numberline {10.3.1}Consistency}{40}{subsubsection.10.3.1}%
+\contentsline {subsubsection}{\numberline {10.3.2}Robustness}{40}{subsubsection.10.3.2}%
+\contentsline {subsubsection}{\numberline {10.3.3}Predictability}{40}{subsubsection.10.3.3}%
+\contentsline {subsubsection}{\numberline {10.3.4}Safety}{40}{subsubsection.10.3.4}%
+\contentsline {subsection}{\numberline {10.4}Enterprise Deployment Considerations}{41}{subsection.10.4}%
+\contentsline {section}{\numberline {11} Conclusion}{42}{section.11}%
+\contentsline {subsection}{\numberline {11.1}Summary of Key Contributions}{42}{subsection.11.1}%
+\contentsline {subsection}{\numberline {11.2}The Path Toward ASI Through Agentic RL}{43}{subsection.11.2}%
+\contentsline {subsection}{\numberline {11.3}Future Research Directions}{43}{subsection.11.3}%
+\contentsline {subsection}{\numberline {11.4}Vision Statement for the Field}{44}{subsection.11.4}%
+\contentsline {section}{\numberline {12}References}{45}{section.12}%

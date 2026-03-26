@@ -1,0 +1,146 @@
+%\documentclass[journal,onecolumn]{IEEEtran}
+\documentclass{article}
+
+\usepackage{arxiv}
+
+% Packages
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{hyperref}
+\usepackage{geometry}
+\usepackage{natbib}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{fancyvrb}
+\usepackage{tikz}
+\usepackage{float}
+\usepackage{microtype}
+\usepackage{enumitem}
+\usepackage{multirow}
+\usepackage{makecell}
+\usepackage{parskip}
+\usetikzlibrary{shapes,arrows,positioning,calc}
+
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+
+% Geometry
+\geometry{margin=1in}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.5em}
+\renewcommand{\arraystretch}{1.15}
+
+% Code listings style
+\lstset{
+    basicstyle=\small\ttfamily,
+    breaklines=true,
+    breakatwhitespace=false,
+    columns=flexible,
+    keepspaces=true,
+    frame=single,
+    numbers=none,
+    showstringspaces=false,
+    tabsize=2,
+    xleftmargin=1em,
+    xrightmargin=1em,
+    framexleftmargin=0.5em,
+    aboveskip=1em,
+    belowskip=1em
+}
+
+% Hyperref
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=cyan,
+    citecolor=blue,
+    pdftitle={Reinforcement Learning Environment for Agentic AI: From Theory to Practice},
+    pdfauthor={},
+}
+
+% Theorems
+\newtheorem{definition}{Definition}[section]
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}{Lemma}[section]
+
+% Graphics path
+\graphicspath{{figures/}}
+
+% Title
+\title{\textbf{Reinforcement Learning Environment for Agentic AI: From Theory to Practice}}
+\date{\today}
+\author{}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+The evolution of Large Language Models (LLMs) from passive text generators to autonomous agentic entities necessitates a fundamental shift in training paradigms. Conventional reinforcement learning (RL) for LLMs operates within degenerate, single-step Markov Decision Processes (MDPs), optimizing for immediate preference alignment rather than long-horizon task completion. In contrast, Agentic Reinforcement Learning (Agentic RL) treats the model as a policy within a temporally extended Partially Observable Markov Decision Process (POMDP), requiring the agent to maintain persistent state, reason across multiple interaction turns, and execute complex action sequences involving tool use and environment manipulation.
+
+This white paper surveys the emerging landscape of RL environments for Agentic AI, bridging the gap between theoretical RL foundations and practical implementation requirements. We formalize the transition from LLM-RL to Agentic RL through the POMDP mathematical framework and analyze the implications of Expanded Action Spaces (ExpA) for training dynamics. We present a systematic taxonomy of agentic capabilities---planning, tool use, memory, self-improvement, and reasoning---and examine how these capabilities manifest across task domains including software engineering, mathematical reasoning, and web interaction.
+
+We survey the open-source ecosystem of development frameworks, including OpenEnv, GEM, and the Model Context Protocol (MCP) for environment interfaces, as well as Agent-Lightning, NVIDIA NeMo RL, and OpenAI Agents SDK for training orchestration. We review state-of-the-art agentic reasoning models from Kimi K2.5's Agent Swarm paradigm to OpenClaw's operating system architecture, and examine the emerging domain of embodied AI through NVIDIA Cosmos and Isaac Sim.
+
+A critical challenge in Agentic RL is the ``dataset ceiling''---the exhaustion of high-quality human data. We analyze synthetic environment generation pipelines including Agent World Model (AWM) and Reasoning Gym (RG) that provide unlimited, verifiable training data. We examine algorithmic innovations in credit assignment for long-horizon tasks, including GRPO, HGPO, HCAPO, and SHADOW. We discuss the sim-to-real gap revealed by the User-Sim Index (USI) and present evaluation frameworks including CLASSic and CLEAR for production readiness.
+
+The convergence of robust RL algorithms, standardized environment interfaces, and high-fidelity simulation for both digital and physical domains marks the beginning of a new era in autonomous AI. By formalizing agent-environment interactions as POMDPs and leveraging synthetic generation pipelines, the field is building a scalable, verifiable path toward Artificial Super Intelligence.
+\end{abstract}
+
+\tableofcontents
+\newpage
+
+\input{content_fixed}
+
+\newpage
+\section{References}
+\label{sec:references}
+
+\begin{enumerate}[label={[\arabic*]}]
+    \item Ouyang, Y., et al. (2022). Training language models to follow instructions with human feedback. \textit{NeurIPS}, 35, 27730-27744.
+    
+    \item Wang, L., et al. (2024). A survey of self-evolving agents: What, when, how, and where to evolve on the path to artificial super intelligence. \textit{arXiv preprint arXiv:2507.21046}.
+    
+    \item Ramamurthy, R., et al. (2023). Is reinforcement learning (not) for natural language processing?: Benchmarks, baselines, and building blocks for natural language policy optimization. \textit{ICLR}.
+    
+    \item The Landscape of Agentic Reinforcement Learning for LLMs: A Survey. (2025). \textit{arXiv preprint arXiv:2509.02547}.
+    
+    \item Sutton, R. S., \& Barto, A. G. (2018). \textit{Reinforcement learning: an introduction} (2nd ed.). MIT Press.
+    
+    \item Snell, C., et al. (2022). Offline RL for natural language generation with implicit language Q learning. \textit{ICLR}.
+    
+    \item Expanded Action Spaces for LLM Agents. (2025). \textit{arXiv preprint}.
+    
+    \item The Rise of Reinforcement Learning Gyms and the Future of Agentic AI. (2026). \textit{Norwest Venture Partners}.
+    
+    \item Wing VC. (2026). RL Environments for Agentic AI: Who Will Win the Training \& Verification Layer by 2030.
+    
+    \item Endless Terminals: Scaling RL Environments for Terminal Agents. (2026). \textit{arXiv preprint arXiv:2601.16443}.
+    
+    \item SWE-Bench: Can Language Models Resolve Real-World GitHub Issues? (2024). \textit{ICLR}.
+    
+    \item UST. (2026). Agentic AI in 2026: The Stack Upgrade.
+    
+    \item Schick, T., et al. (2024). Toolformer: Language models can teach themselves to use tools. \textit{NeurIPS}, 36.
+    
+    \item Weber, T., et al. (2024). The challenge of credit assignment in reinforcement learning. \textit{Milvus AI Quick Reference}.
+    
+    \item Shao, Z., et al. (2024). Deepseekmath: Pushing the limits of mathematical reasoning in open language models. \textit{arXiv preprint arXiv:2402.03300}.
+    
+    \item Hindsight Credit Assignment for Long-Horizon LLM Agents. (2026). \textit{arXiv preprint arXiv:2603.08754}.
+    
+    \item Zhao, W., et al. (2020). Sim-to-real transfer in deep reinforcement learning for robotics: A survey. \textit{IEEE Symposium Series on Computational Intelligence}.
+    
+    \item Mind the Sim2Real Gap in User Simulation for Agentic Tasks. (2026). \textit{arXiv preprint arXiv:2603.11245}.
+\end{enumerate}
+
+\end{document}
