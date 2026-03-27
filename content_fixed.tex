@@ -148,7 +148,9 @@ The observation function $\mathcal{O}(o_t | s_t, a_{t-1})$ formalizes the limite
 \end{enumerate}
 The belief state $b_t(s) = P(s_t = s | h_t)$ provides a probabilistic representation of the agent's uncertainty about the true environment state given its history. Optimal behavior in POMDPs often requires maintaining and updating this belief state, though LLM-based agents typically employ heuristic approximations through their context windows and reasoning capabilities.
 
-\begin{table}[tbp]
+Table~\ref{tbl:llm-rl-vs-agentic} summarizes the core shift from preference-tuned, single-step language modeling to long-horizon agent-environment interaction.
+
+\begin{table}[htbp]
 \centering
 \footnotesize
 \begin{tabularx}{\textwidth}{YYY}
@@ -163,6 +165,8 @@ Information & Full observability & Partial observability \\
 Temporal Structure & Stateless, independent decisions & Stateful, sequential dependencies \\
 \bottomrule
 \end{tabularx}
+\caption{Comparison between conventional LLM-RL and Agentic Reinforcement Learning under the POMDP formulation.}
+\label{tbl:llm-rl-vs-agentic}
 \end{table}
 
 \subsection{Expanded Action Spaces (ExpA)}
@@ -253,7 +257,11 @@ Extensibility & Requires retraining for new capabilities & Modular addition of e
 Observability & Black-box output & Transparent reasoning and action separation \\
 \bottomrule
 \end{tabularx}
+\caption{Comparison between traditional LLM-RL and ExpA-based Agentic RL.}
+\label{tbl:expa-vs-traditional}
 \end{table}
+
+As shown in Table~\ref{tbl:expa-vs-traditional}, the crucial difference is that ExpA turns tool use and environment selection into first-class policy decisions rather than requiring text to implicitly encode actions.
 
 In traditional LLM-RL, when a model generates the token sequence "CALCULATE 2+2", the system must parse this text to extract the intended action. In the ExpA framework, the model explicitly routes to $\mathcal{E}_{\text{calc}}$ and executes $\text{compute}(2+2)$, eliminating the ambiguity of text-based action specification.
 
@@ -261,7 +269,7 @@ The mathematical formulation of Agentic RL with Expanded Action Spaces provides 
 
 \section{Taxonomy of Agentic Capabilities and Task Domains}
 
-\begin{figure}[tbp]
+\begin{figure}[htbp]
     \centering
     \includegraphics[width=0.95\textwidth]{fig3_agentic_capabilities_gemini.png}
     \caption{A taxonomy of the five core agentic capabilities required for autonomous operation: Planning (decomposition, goal setting, replanning), Tool Use (API calling, code execution), Memory (short-term, long-term, episodic), Self-Improvement (learning from feedback, error recognition), and Reasoning (chain-of-thought, verification).}
@@ -367,6 +375,8 @@ Web and GUI interaction tasks require agents to navigate visual interfaces, unde
 \end{itemize}
 Benchmarks like OSWorld and BrowserGym provide simulated environments where agents interact with operating systems and web browsers. Success requires integrating visual perception with planning and tool use capabilities.
 
+This benchmark family is broader than the headline suites usually cited in agent papers. MiniWoB++ remains useful for evaluating atomic browser skills such as clicking, typing, and menu navigation; WebArena and BrowserGym focus on realistic multi-page workflows; and ALFWorld, TextWorld, and ScienceWorld extend the environment lens to grounded text-based action spaces where partial observability, exploration, and long-horizon planning can be studied under controlled conditions.
+
 \subsection{Capability-Domain Classification Matrix}
 
 The following matrix summarizes how core capabilities map to requirements across task domains:
@@ -385,7 +395,11 @@ The following matrix summarizes how core capabilities map to requirements across
 \textbf{Reasoning} & Logic verification and type checking & Deductive chains and symbolic manipulation & Visual reasoning and layout inference \\
 \bottomrule
 \end{tabularx}
+\caption{Capability-domain matrix showing how core agentic capabilities manifest across major benchmark families.}
+\label{tbl:capability-domain-matrix}
 \end{table}
+
+Table~\ref{tbl:capability-domain-matrix} makes clear that environment design is inseparable from evaluation design: each domain rewards a different combination of planning, tool use, memory, and reasoning.
 
 \subsection{Concrete Examples}
 
@@ -452,6 +466,8 @@ This design choice enables seamless migration of existing RL algorithms while ac
 
 \textbf{Key Features and Capabilities}
 
+Table~\ref{tbl:openenv-features} summarizes the infrastructure properties that make OpenEnv representative of the new environment layer.
+
 \begin{table}[tbp]
 \centering
 \footnotesize
@@ -466,6 +482,8 @@ Async Vectorization & Parallel environment execution & High-throughput data coll
 Trajectory Recording & Built-in episode logging and replay & Debugging, evaluation, and demonstration collection \\
 \bottomrule
 \end{tabularx}
+\caption{Key OpenEnv design features and the training benefits they provide.}
+\label{tbl:openenv-features}
 \end{table}
 
 The framework's emphasis on reproducibility and safety addresses a critical gap in Agentic RL research. By containerizing environments, OpenEnv ensures that experimental results are deterministic and that agents cannot inadvertently cause system damage during explorationa significant concern when training models capable of executing arbitrary code or making web requests.
@@ -584,6 +602,8 @@ async def use_mcp_tools():
 
 \textbf{Comparison of Environment Frameworks}
 
+Table~\ref{tbl:environment-frameworks} compares the major framework patterns discussed in this section.
+
 \begin{table}[tbp]
 \centering
 \footnotesize
@@ -596,6 +616,8 @@ async def use_mcp_tools():
 \textbf{MCP} & Tool integration standard & N/A & Yes & MCP Protocol & Enterprise tool connectivity \\
 \bottomrule
 \end{tabularx}
+\caption{Comparison of representative environment and interface frameworks for Agentic RL.}
+\label{tbl:environment-frameworks}
 \end{table}
 
 \subsection{RL Training and Orchestration Libraries}
@@ -799,7 +821,9 @@ Taken together, SkyRL-Agent, VeRL-Tool, and rLLM are important because they refl
 
 \textbf{Comparison of RL Training Libraries}
 
-\begin{table}[tbp]
+Table~\ref{tbl:training-libraries} highlights how the current training stack differs in rollout architecture, modularity, and intended deployment setting.
+
+\begin{table}[hp]
 \centering
 \footnotesize
 \begin{tabularx}{\textwidth}{YYYYY}
@@ -815,6 +839,8 @@ Taken together, SkyRL-Agent, VeRL-Tool, and rLLM are important because they refl
 \textbf{OpenAI Agents SDK} & Rapid prototyping & Workflow orchestration & Native & Built-in tracing and guardrails \\
 \bottomrule
 \end{tabularx}
+\caption{Comparison of representative RL training and orchestration libraries for agentic systems.}
+\label{tbl:training-libraries}
 \end{table}
 
 \subsection{Integration Patterns and Best Practices}
@@ -861,7 +887,9 @@ The PARL framework operates through three key mechanisms:
 \end{enumerate}
 \subsubsection{Technical Specifications}
 
-\begin{table}[tbp]
+Table~\ref{tbl:kimi-specifications} summarizes the scale assumptions that make the PARL architecture notable.
+
+\begin{table}[htp]
 \centering
 \footnotesize
 \begin{tabularx}{\textwidth}{YY}
@@ -877,6 +905,8 @@ Training Data & Multimodal (text, vision, code) \\
 Architecture & Mixture-of-Experts (MoE) \\
 \bottomrule
 \end{tabularx}
+\caption{Representative technical specifications reported for Kimi K2.5.}
+\label{tbl:kimi-specifications}
 \end{table}
 
 \subsubsection{Zero-Vision SFT}
@@ -914,7 +944,7 @@ OpenClaw's architecture mirrors traditional operating systems in its layered des
 
 A representative enterprise deployment stack around OpenClaw adds capabilities that address critical production requirements around security, compliance, and governance:
 
-\begin{table}[tbp]
+\begin{table}[htp]
 \centering
 \footnotesize
 \begin{tabularx}{\textwidth}{YY}
@@ -928,7 +958,11 @@ Compliance Frameworks & Pre-built templates for GDPR, HIPAA, and SOC 2 complianc
 Secure Sandboxing & Isolated execution environments for untrusted code \\
 \bottomrule
 \end{tabularx}
+\caption{Representative enterprise deployment capabilities for an OpenClaw-style agent platform.}
+\label{tbl:openclaw-enterprise-stack}
 \end{table}
+
+As summarized in Table~\ref{tbl:openclaw-enterprise-stack}, the operating-system metaphor is useful precisely because it foregrounds governance, isolation, and extensibility rather than only model quality.
 
 \subsubsection{Plugin SDK and Extensibility}
 
@@ -971,9 +1005,9 @@ OpenAI's Operator, powered by the \textbf{Computer-Using Agent (CUA)} model buil
 
 The following tables provide a structured comparison of the major architectural approaches:
 
-\subsubsection{Table 1: Core Architecture Comparison}
+\subsubsection{Core Architecture Comparison}
 
-\begin{table}[tbp]
+\begin{table}[htp]
 \centering
 \footnotesize
 \begin{tabularx}{\textwidth}{YYYYYY}
@@ -988,9 +1022,11 @@ The following tables provide a structured comparison of the major architectural 
 \textbf{Target User} & Enterprise and platform builders & Developers and IT & Software developers & End users & Enterprise and developers \\
 \bottomrule
 \end{tabularx}
+\caption{Core architecture comparison across representative state-of-the-art agent systems.}
+\label{tbl:core-architecture-comparison}
 \end{table}
 
-\subsubsection{Table 2: Technical Capabilities Matrix}
+\subsubsection{Technical Capabilities Matrix}
 
 \begin{table}[tbp]
 \centering
@@ -1007,11 +1043,13 @@ The following tables provide a structured comparison of the major architectural 
 \textbf{Enterprise Security} & Standard & Policy and governance layer & Basic & Standard \\
 \bottomrule
 \end{tabularx}
+\caption{Technical capability matrix for representative agentic model and platform families.}
+\label{tbl:technical-capabilities-matrix}
 \end{table}
 
-\subsubsection{Table 3: Use Case Alignment}
+\subsubsection{Use Case Alignment}
 
-\begin{table}[tbp]
+\begin{table}[htbp]
 \centering
 \footnotesize
 \begin{tabularx}{\textwidth}{YYY}
@@ -1026,7 +1064,11 @@ The following tables provide a structured comparison of the major architectural 
 \textbf{Compliance-sensitive deployments} & OpenClaw plus enterprise policy layer & Policy guardrails and audit logging \\
 \bottomrule
 \end{tabularx}
+\caption{Use-case alignment across major agentic model and platform archetypes.}
+\label{tbl:use-case-alignment}
 \end{table}
+
+Tables~\ref{tbl:core-architecture-comparison}, \ref{tbl:technical-capabilities-matrix}, and \ref{tbl:use-case-alignment} show that current systems differ at least as much in runtime assumptions and deployment posture as they do in model scale.
 
 \subsection{Architectural Implications}
 
@@ -1044,6 +1086,8 @@ The transition from digital agents to embodied systems operating in physical spa
 The foundation of embodied AI training rests upon high-fidelity simulation environments that can accurately replicate physical dynamics while enabling safe, scalable experimentation. NVIDIA Cosmos 3 represents a paradigm shift in this domain, functioning as a world foundation model that unifies synthetic world generation, vision reasoning, and action simulation within a single coherent framework. Unlike traditional simulators that rely on handcrafted scene descriptions, Cosmos 3 leverages generative AI to produce diverse, physically plausible environments on demand, enabling agents to train across vast variations of scenarios that would be impractical to construct physically. The model's ability to generate photorealistic synthetic data with accurate physical properties addresses the fundamental data scarcity problem in robotics, where collecting real-world demonstration data remains prohibitively expensive and time-consuming.
 
 Complementing Cosmos 3, NVIDIA Isaac Sim 2 provides a comprehensive robotics simulation platform built on Omniverse technologies, offering physically accurate, high-fidelity simulation for testing robot behavior before deployment. Isaac Sim 2 integrates advanced physics engines capable of simulating rigid body dynamics, soft body deformation, fluid interactions, and complex contact mechanics essential for realistic manipulation tasks. The platform supports domain randomization techniques that systematically vary physical parametersfriction coefficients, mass distributions, lighting conditionsduring training, thereby enhancing policy robustness and facilitating sim-to-real transfer. Crucially, Isaac Sim 2 enables virtual commissioning of entire production lines, allowing manufacturers to validate complex multi-robot coordination strategies without disrupting operational facilities. The integration of ray-traced rendering with physics simulation produces visual observations that closely match real camera feeds, reducing the reality gap that has historically plagued simulated training approaches.
+
+At the same time, the embodied-environment literature is broader than vendor simulation stacks alone. Habitat established a standard platform for embodied navigation and rearrangement research; Meta-World, RLBench, and ManiSkill operationalized reproducible manipulation benchmarks; BEHAVIOR expanded toward household activities with long-horizon compositional tasks; and MineDojo demonstrated how open-ended sandbox worlds can function as rich training environments for embodied and tool-using agents. These suites matter because they specify the evaluation substrate on which claims about generality, transfer, and robustness are made.
 
 \subsection{Physical AI: GR00t, Alpamayo, and Newton}
 
@@ -1129,7 +1173,9 @@ The convergence of AWM and RG addresses the dataset ceiling through several comp
 
 The design choice between SQL-backed environments (AWM) and LLM-simulated environments represents a fundamental trade-off in synthetic environment architecture:
 
-\begin{table}[tbp]
+Table~\ref{tbl:synthetic-environment-tradeoffs} captures the main systems trade-offs between these two families.
+
+\begin{table}[htbp]
 \centering
 \footnotesize
 \begin{tabularx}{\textwidth}{YYY}
@@ -1144,6 +1190,8 @@ The design choice between SQL-backed environments (AWM) and LLM-simulated enviro
 \textbf{Reward Signal Quality} & Dense, immediate rewards based on query results and state changes & Sparse or delayed rewards that often require post-hoc evaluation \\
 \bottomrule
 \end{tabularx}
+\caption{Comparison between SQL-backed synthetic environments and LLM-simulated environments.}
+\label{tbl:synthetic-environment-tradeoffs}
 \end{table}
 
 SQL-backed environments excel in scenarios requiring precise state tracking, deterministic behavior, and verifiable outcomes. They are particularly suited for training agents in business analytics, data science workflows, financial modeling, and any domain where structured data manipulation is central. The transactional nature of database operations ensures agents learn to reason about persistent state changesa critical capability for real-world tool use.
@@ -1285,7 +1333,11 @@ The following table summarizes the key characteristics of these algorithmic appr
 \textbf{DPO} & No & Direct preference optimization & Preference-based fine-tuning & Low \\
 \bottomrule
 \end{tabularx}
+\caption{Comparison of algorithmic approaches for long-horizon credit assignment in Agentic RL.}
+\label{tbl:algorithm-comparison}
 \end{table}
+
+Table~\ref{tbl:algorithm-comparison} is especially relevant for environment design because richer environments increase horizon length, observability challenges, and reward sparsity simultaneously.
 
 \subsection{Practical Considerations and Implementation}
 
@@ -1382,6 +1434,8 @@ The CLASSic framework provides a structured approach to evaluating agentic syste
 
 \textbf{Stability} evaluates system behavior under varying load conditions, resource constraints, and operational stress. Production agents must maintain consistent performance during traffic spikes, infrastructure degradation, and dependency failures.
 
+Table~\ref{tbl:classic-framework} operationalizes these dimensions for production-facing evaluation.
+
 \begin{table}[tbp]
 \centering
 \footnotesize
@@ -1396,6 +1450,8 @@ The CLASSic framework provides a structured approach to evaluating agentic syste
 \textbf{Stability} & Error rates under load, recovery time, and resource utilization & Chaos engineering and stress testing \\
 \bottomrule
 \end{tabularx}
+\caption{The CLASSic framework for production assessment of agentic systems.}
+\label{tbl:classic-framework}
 \end{table}
 
 \subsection{The CLEAR Framework: Bridging the Production Gap}
@@ -1460,6 +1516,8 @@ Safety ensures bounded harm when failures occur. Drawing from safety-critical en
 
 \textbf{Deterministic guardrails} verify that action whitelisting and policy constraints prevent harmful operations regardless of reasoning outputs.
 
+Table~\ref{tbl:reliability-dimensions} summarizes the four reliability dimensions that complement CLASSic and CLEAR.
+
 \begin{table}[tbp]
 \centering
 \footnotesize
@@ -1473,6 +1531,8 @@ Safety ensures bounded harm when failures occur. Drawing from safety-critical en
 \textbf{Safety} & Are failure consequences bounded? & Severity distribution, tail risk, and guardrail effectiveness \\
 \bottomrule
 \end{tabularx}
+\caption{Four reliability dimensions for evaluating production readiness of agentic systems.}
+\label{tbl:reliability-dimensions}
 \end{table}
 
 \subsection{Enterprise Deployment Considerations}

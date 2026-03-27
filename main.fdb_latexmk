@@ -1,6 +1,6 @@
 # Fdb version 4
-["pdflatex"] 1774579664.34109 "/Users/fei/.openclaw/workspace/rl-paper/main.tex" "main.pdf" "main" 1774579668.24294 0
-  "/Users/fei/.openclaw/workspace/rl-paper/main.tex" 1774576540.18304 9715 17aa0c3d2c16dd1beaf7509e55fb5cc2 ""
+["pdflatex"] 1774582574.64667 "/Users/fei/.openclaw/workspace/rl-paper/main.tex" "main.pdf" "main" 1774582578.73724 0
+  "/Users/fei/.openclaw/workspace/rl-paper/main.tex" 1774582481.80329 11198 e5f9d491f9ed72014f7d088f1e6074d6 ""
   "/usr/local/texlive/2026/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc" 1254269338 2375 baa924870cfb487815765f9094cf3728 ""
   "/usr/local/texlive/2026/texmf-dist/fonts/enc/dvips/lm/lm-mathex.enc" 1202520719 3486 c7eadf5dcc57b3b2d11736679f6636ba ""
   "/usr/local/texlive/2026/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc" 1202520719 2405 5dcf2c1b967ee25cc46c58cd52244aed ""
@@ -246,7 +246,7 @@
   "/usr/local/texlive/2026/texmf-var/web2c/pdftex/pdflatex.fmt" 1772409757 3636768 9f94d239f422c02416e379a36a852ffd ""
   "/usr/local/texlive/2026/texmf.cnf" 1772409725 577 648cd9f92f9c0eac486f4c71c85cfbbe ""
   "arxiv.sty" 1774483072.2354 7641 f2cb9d6386c38cb1ddd8d4504a6292a3 ""
-  "content_fixed.tex" 1774577183.75336 140602 8cb3bbad65741ed0186f1d46c5c5d3a1 ""
+  "content_fixed.tex" 1774582481.80328 145678 3f23c9ad1f9798ae8a36226948351ef2 ""
   "figures/fig1_mdp_to_pomdp_gemini.png" 1774407505.18656 1958914 3a79b123a6612c9d88f70678f74eb941 ""
   "figures/fig2_expanded_action_space_gemini.png" 1774407505.19088 1970364 8e6c28265b6c8c2932ab18c46887c13b ""
   "figures/fig3_agentic_capabilities_gemini.png" 1774483426.62973 187753 9559bc06251fcbf4b0d3367955b5a981 ""
@@ -255,10 +255,10 @@
   "figures/fig6_credit_assignment_gemini.png" 1774407505.21617 1499414 bed9c518e641078ce1acc9abd3d52f6a ""
   "figures/fig7_sim_to_real_gemini.png" 1774407505.22283 1945405 40995cd90705c16cbca63a2650cc0a8c ""
   "figures/fig8_evolution_timeline_gemini.png" 1774407505.22698 2285891 ff43d91900161e89f5bca8263064f84f ""
-  "main.aux" 1774579668.14674 22470 8d97251a47a42cd955c681fc65fa080a "pdflatex"
-  "main.out" 1774579668.14791 24407 9bbccad0aef0d77908b00bab27259ea6 "pdflatex"
-  "main.tex" 1774576540.18304 9715 17aa0c3d2c16dd1beaf7509e55fb5cc2 ""
-  "main.toc" 1774579668.14809 10778 d1e2139e96ea1ae984137766321f5a9d "pdflatex"
+  "main.aux" 1774582578.61264 27668 0ab43a2c1388fff7239c8766e58e5001 "pdflatex"
+  "main.out" 1774582578.61407 24254 920a9a5e4168bd33ac9fcec56832cd5b "pdflatex"
+  "main.tex" 1774582481.80329 11198 e5f9d491f9ed72014f7d088f1e6074d6 ""
+  "main.toc" 1774582578.61426 10752 b99ad25bf82a1745c085a794f37ad994 "pdflatex"
   (generated)
   "main.aux"
   "main.log"
