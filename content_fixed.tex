@@ -47,6 +47,52 @@ This white paper provides a comprehensive analysis of the environment layer for 
 
 Section 11 concludes with a research agenda for next-generation RL environments. We argue that the path to production-ready agentic systems runs through the environment layer---and that investment in environment infrastructure will yield compounding returns across the entire Agentic AI stack.
 
+\begin{figure}[tbp]
+    \centering
+    \begin{tikzpicture}[
+        box/.style={rectangle, draw=gray!80, fill=white, minimum width=10.5cm, minimum height=1.2cm, align=center, font=\small\sffamily, thick, rounded corners=2pt},
+        infra/.style={rectangle, draw=gray!50, fill=gray!10, minimum width=10.5cm, minimum height=1.2cm, align=center, font=\small\sffamily, thick, rounded corners=2pt},
+        highlight/.style={rectangle, draw=blue!80, fill=blue!5, ultra thick, minimum width=11cm, minimum height=3.2cm, align=center, font=\small\sffamily, rounded corners=6pt},
+        smallbox/.style={rectangle, draw=gray!60, fill=white, rounded corners=3pt, minimum width=3.2cm, minimum height=0.8cm, align=center, font=\footnotesize\sffamily, thin},
+        genbox/.style={rectangle, draw=green!60!black, fill=green!5, rounded corners=3pt, minimum width=3.2cm, minimum height=0.8cm, align=center, font=\footnotesize\sffamily, thin},
+        arrow/.style={->, >=stealth, thick, line width=1pt, color=gray!80}
+    ]
+    % Infrastructure Layer
+    \node[infra] (infra) at (0,0) {\textbf{Infrastructure Layer}\\Compute (GPU/TPU), Storage, Networking, Containerization (Docker/K8s)};
+    
+    % Environment Layer (highlighted)
+    \node[highlight] (env_bg) at (0,3.1) {};
+    \node[font=\bfseries\small, text=blue!80] at (0,4.3) {ENVIRONMENT LAYER};
+    
+    % Frameworks
+    \node[smallbox] (openenv) at (-3.4,3.7) {OpenEnv};
+    \node[smallbox] (gem) at (0,3.7) {GEM};
+    \node[smallbox] (mcp) at (3.4,3.7) {MCP};
+    \node[font=\scriptsize\itshape, text=gray!70] at (0,3.15) {Standardized Interfaces \& Frameworks};
+    
+    % Synthetic/Embodied
+    \node[genbox] (awm) at (-3.4,2.4) {AWM};
+    \node[genbox] (rgym) at (0,2.4) {Reasoning Gym};
+    \node[genbox] (isaac) at (3.4,2.4) {Cosmos / Isaac Sim};
+    \node[font=\scriptsize\itshape, text=gray!70] at (0,1.85) {Synthetic Generation \& Embodied Simulators};
+    
+    % Agent Layer
+    \node[box, fill=orange!10, draw=orange!70] (agent) at (0,6.2) {\textbf{Agent Layer}\\Policies, Reasoning (CoT), Planning, Tool Orchestration};
+    
+    % Application Layer
+    \node[box, fill=purple!10, draw=purple!70] (app) at (0,7.9) {\textbf{Application Layer}\\Software Engineering, Web Navigation, Embodied AI, Data Analytics};
+    
+    % Arrows with labels
+    \draw[arrow] (infra) -- (env_bg) node[midway, right, font=\tiny, text=gray] {Resources};
+    \draw[arrow] (env_bg) -- (agent) node[midway, right, font=\tiny, text=gray] {Observations/Rewards};
+    \draw[arrow] (agent) -- (env_bg.north) node[midway, left, font=\tiny, text=gray] {Actions};
+    \draw[arrow] (agent) -- (app) node[midway, right, font=\tiny, text=gray] {Solutions};
+    
+    \end{tikzpicture}
+    \caption{The Environment Layer as the foundational infrastructure for Agentic AI. Positioned between low-level compute infrastructure and high-level agent capabilities, the environment layer provides standardized interfaces (OpenEnv, GEM, MCP), synthetic generation pipelines (AWM, Reasoning Gym, Cosmos/Isaac), and quality assurance mechanisms. This layer determines what capabilities agents can learn and how reliably they transfer to deployment.}
+    \label{fig:env-layer}
+\end{figure}
+
 \section{ Theoretical Framework: From LLM-RL to Agentic RL}
 
 \begin{figure}[tbp]
@@ -1417,6 +1463,46 @@ The sim-to-real gap represents a critical risk factor in the transition from res
 
 In conclusion, the sim-to-real gap in user simulation represents one of the most significant challenges facing the field of agentic AI. The persistent gap between LLM simulators and real humans on the User-Sim Index serves as a quantitative warning: agents trained in synthetic environments may be optimized for a reality that does not exist. Addressing this gapthrough improved simulation fidelity, human-in-the-loop validation, and robust deployment strategiesis essential for realizing the promise of autonomous AI systems that can reliably serve real human needs.
 \section{Evaluation and Production Readiness}
+
+\begin{figure}[tbp]
+    \centering
+    \begin{tikzpicture}[
+        axis/.style={->, thick, >=stealth, color=gray!80, line width=1.2pt},
+        label/.style={font=\small\bfseries\sffamily, text=black!80},
+        tick/.style={font=\footnotesize\sffamily, text=gray!80},
+        env/.style={circle, draw, minimum size=1.0cm, font=\tiny\sffamily, align=center, thick},
+        quality/.style={ellipse, draw=green!60!black, fill=green!10, thick, minimum width=3.8cm, minimum height=2.4cm, font=\small\bfseries\sffamily, text=green!50!black, opacity=0.8}
+    ]
+    % Simple Gradient-like Circles for background context
+    \fill[green!5, opacity=0.5] (3.5,3.0) circle (2.2cm);
+    \fill[yellow!5, opacity=0.5] (1.0,1.0) circle (1.5cm);
+
+    % Axes
+    \draw[axis] (0,0) -- (6.5,0) node[label, right] {Diversity};
+    \draw[axis] (0,0) -- (0,5.5) node[label, above] {Fidelity};
+    \draw[axis] (0,0) -- (-3.5,-2.5) node[label, below left] {Verifiability};
+    
+    % Quality zone with a "glow" effect
+    \node[quality] (qz) at (4.0,3.5) {Quality Zone};
+    \node[font=\tiny\itshape, text=green!40!black] at (4.0,3.0) {(Target Production Area)};
+    
+    % Arrows to indicate direction of improvement
+    \draw[->, >=stealth, green!70!black, ultra thick, opacity=0.3] (1,1) -- (3.5,3);
+
+    % Environment examples with color coding
+    % Color key: red (low), orange (mid), blue (specialized), green (high quality)
+    \node[env, fill=red!10, draw=red!40] at (0.8,0.8) {Toy\\Sim};
+    \node[env, fill=orange!10, draw=orange!40] at (2.2,2.0) {Web\\Arena};
+    \node[env, fill=blue!10, draw=blue!40] at (2.8,4.5) {Isaac\\Sim};
+    \node[env, fill=yellow!10, draw=yellow!60!black] at (3.8,1.5) {SWE\\Bench};
+    \node[env, fill=green!10, draw=green!40] at (4.8,4.2) {AWM};
+    \node[env, fill=cyan!10, draw=cyan!40] at (5.2,2.8) {Reasoning\\Gym};
+    \node[env, fill=purple!10, draw=purple!40] at (0.5,4.0) {Static\\Dataset};
+    
+    \end{tikzpicture}
+    \caption{The Environment Quality Framework (EQF) positions environments along three axes: \textbf{Fidelity}, \textbf{Diversity}, and \textbf{Verifiability}. The ``Quality Zone'' represents the ideal region for reliable training signals.}
+    \label{fig:eqf}
+\end{figure}
 
 The transition from research prototypes to production-grade agentic systems demands rigorous evaluation frameworks extending far beyond traditional accuracy metrics. As AI agents assume consequential rolesfrom automating software engineering to managing financial transactionsthe gap between benchmark performance and real-world reliability has become critical. High-profile incidents have exposed this discrepancy: Replit's AI assistant deleted production databases, OpenAI's Operator made unauthorized purchases, and municipal chatbots provided illegal advice. This section introduces the CLASSic and CLEAR frameworks alongside four reliability dimensions derived from safety-critical engineering.
 
