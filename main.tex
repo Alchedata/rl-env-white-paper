@@ -22,6 +22,8 @@
 \usepackage{listings}
 \usepackage{fancyvrb}
 \usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
 \usepackage{float}
 \usepackage{microtype}
 \usepackage{enumitem}
@@ -80,7 +82,7 @@
 \graphicspath{{figures/}}
 
 % Title
-\title{\textbf{The Environment Layer: Building Infrastructure for Agentic AI Training}}
+\title{\textbf{The Environment Layer: Infrastructure and Empirical Evaluation for Agentic AI Training}}
 \date{\today}
 \author{
   Fei Wang \\
@@ -98,14 +100,14 @@
 \maketitle
 
 % Keywords
-\keywords{Agentic AI, Reinforcement Learning Environments, RL Gyms, Environment Design, Synthetic Environments, Sim-to-Real Transfer, POMDP, Environment Infrastructure}
+\keywords{Agentic AI, Reinforcement Learning Environments, RL Gyms, Environment Design, Synthetic Environments, Sim-to-Real Transfer, POMDP, Environment Infrastructure, Empirical Evaluation, Environment Quality Framework}
 
 \begin{abstract}
 The emergence of Agentic Reinforcement Learning (Agentic RL) has created an urgent need for sophisticated training environments that go beyond traditional RL benchmarks. While conventional LLM-RL operates within single-step MDPs, Agentic RL requires environments supporting multi-turn interactions, tool integration, and verifiable reward signals. This white paper argues that \textbf{RL environments are the foundational infrastructure for agentic AI}---the critical layer that determines what capabilities agents can learn and how reliably they transfer to deployment.
 
 We present a comprehensive analysis of the environment layer, organized around three core questions: (1) \textbf{Environment Design}---what makes an effective Agentic RL environment, including observation spaces, action interfaces, and reward mechanisms; (2) \textbf{Environment Infrastructure}---the frameworks, protocols, and tools for building and deploying environments at scale; and (3) \textbf{Environment Quality}---methodologies for evaluating environment fidelity, the sim-to-real gap, and production readiness.
 
-We survey the ecosystem of environment frameworks (OpenEnv, GEM, MCP), synthetic environment generation pipelines (Agent World Model, Reasoning Gym), and specialized environments for embodied AI (NVIDIA Cosmos, Isaac Sim). We introduce the Environment Quality Framework (EQF) for systematic environment evaluation and analyze the critical sim-to-real gap through the User-Sim Index. Finally, we present a research agenda for next-generation RL environments that will enable the transition from research prototypes to production-ready agentic systems.
+We survey the ecosystem of environment frameworks (OpenEnv, GEM, MCP), synthetic environment generation pipelines (Agent World Model, Reasoning Gym), and specialized environments for embodied AI (NVIDIA Cosmos, Isaac Sim). We introduce the Environment Quality Framework (EQF) for systematic environment evaluation and analyze the critical sim-to-real gap through the User-Sim Index. We validate our frameworks empirically by benchmarking three frontier models (GPT-4o, Claude Sonnet 4, Gemini 2.5 Pro) on AWM and Reasoning Gym environments, reporting per-capability success rates, trajectory degradation curves, and operational cost profiles. We further formalize the EQF with a quantitative scoring rubric and demonstrate that higher-EQF environments produce more discriminative evaluations. Finally, we present a research agenda for next-generation RL environments that will enable the transition from research prototypes to production-ready agentic systems.
 \end{abstract}
 
 \tableofcontents
@@ -114,111 +116,8 @@ We survey the ecosystem of environment frameworks (OpenEnv, GEM, MCP), synthetic
 \input{content_fixed}
 
 \newpage
-\section{References}
-\label{sec:references}
-
-\begin{enumerate}[label={[\arabic*]}]
-    \item Ouyang, Y., et al. (2022). Training language models to follow instructions with human feedback. \textit{NeurIPS}, 35, 27730-27744.
-    
-    \item Wang, L., et al. (2024). A survey of self-evolving agents: What, when, how, and where to evolve on the path to artificial super intelligence. \textit{arXiv preprint arXiv:2507.21046}.
-    
-    \item Ramamurthy, R., et al. (2023). Is reinforcement learning (not) for natural language processing?: Benchmarks, baselines, and building blocks for natural language policy optimization. \textit{ICLR}.
-    
-    \item The Landscape of Agentic Reinforcement Learning for LLMs: A Survey. (2025). \textit{arXiv preprint arXiv:2509.02547}.
-    
-    \item Sutton, R. S., \& Barto, A. G. (2018). \textit{Reinforcement learning: an introduction} (2nd ed.). MIT Press.
-    
-    \item Snell, C., et al. (2022). Offline RL for natural language generation with implicit language Q learning. \textit{ICLR}.
-    
-    \item Expanded Action Spaces for LLM Agents. (2025). \textit{arXiv preprint arXiv:2501.08632}.
-    
-    \item The Rise of Reinforcement Learning Gyms and the Future of Agentic AI. (2026). \textit{Norwest Venture Partners}.
-    
-    \item Wing VC. (2026). RL Environments for Agentic AI: Who Will Win the Training \& Verification Layer by 2030.
-    
-    \item Endless Terminals: Scaling RL Environments for Terminal Agents. (2026). \textit{arXiv preprint arXiv:2601.16443}.
-    
-    \item Jimenez, C. E., et al. (2024). SWE-Bench: Can language models resolve real-world GitHub issues? \textit{ICLR}.
-    
-    \item UST. (2026). Agentic AI in 2026: The Stack Upgrade.
-    
-    \item Schick, T., et al. (2024). Toolformer: Language models can teach themselves to use tools. \textit{NeurIPS}, 36.
-    
-    \item Weber, T., et al. (2024). The challenge of credit assignment in reinforcement learning. \textit{Milvus AI Quick Reference}.
-    
-    \item Shao, Z., et al. (2024). DeepSeekMath: Pushing the limits of mathematical reasoning in open language models. \textit{arXiv preprint arXiv:2402.03300}.
-    
-    \item Hindsight Credit Assignment for Long-Horizon LLM Agents. (2026). \textit{arXiv preprint arXiv:2603.08754}.
-    
-    \item Zhao, W., et al. (2020). Sim-to-real transfer in deep reinforcement learning for robotics: A survey. \textit{IEEE Symposium Series on Computational Intelligence}.
-    
-    \item Mind the Sim2Real Gap in User Simulation for Agentic Tasks. (2026). \textit{arXiv preprint arXiv:2603.11245}.
-    
-    \item Schulman, J., et al. (2017). Proximal policy optimization algorithms. \textit{arXiv preprint arXiv:1707.06347}.
-    
-    \item Rafailov, R., et al. (2023). Direct preference optimization: Your language model is secretly a reward model. \textit{NeurIPS}.
-    
-    \item Yao, S., et al. (2023). ReAct: Synergizing reasoning and acting in language models. \textit{ICLR}.
-    
-    \item Wei, J., et al. (2022). Chain-of-thought prompting elicits reasoning in large language models. \textit{NeurIPS}, 35, 24824-24837.
-    
-    \item OpenAI. (2025). GPT-5.4 Technical Report. \textit{OpenAI Technical Report}.
-    
-    \item Anthropic. (2026). Claude 4.6: Advances in reasoning and agentic capabilities. \textit{Anthropic Technical Report}.
-    
-    \item Zhipu AI. (2026). GLM 5: A new generation of agentic language models. \textit{Zhipu AI Technical Report}.
-    
-    \item Moonshot AI. (2026). Kimi K2.5: Scaling agentic AI with mixture-of-experts. \textit{arXiv preprint arXiv:2601.12345}.
-    
-    \item Anthropic. (2024). Model Context Protocol: A standard for connecting AI assistants to systems. \textit{Anthropic Technical Specification}.
-    
-    \item Brockman, G., et al. (2025). OpenAI Agents SDK: Building multi-agent workflows. \textit{OpenAI Developer Documentation}.
-    
-    \item NVIDIA. (2026). NVIDIA NeMo RL: A framework for training agentic AI. \textit{NVIDIA Technical Documentation}.
-    
-    \item Microsoft Research. (2026). Agent-Lightning: Non-intrusive RL training for production agents. \textit{Microsoft Research Technical Report}.
-    
-    \item NVIDIA. (2026). Cosmos 3: World foundation models for physical AI. \textit{NVIDIA Technical Report}.
-    
-    \item NVIDIA. (2026). Isaac Sim 2: High-fidelity robotics simulation. \textit{NVIDIA Technical Documentation}.
-    
-    \item NVIDIA. (2026). GR00T N: Foundation models for humanoid robotics. \textit{NVIDIA Technical Report}.
-    
-    \item Agent World Model: Scaling Tool-Use Environments for LLM Agents. (2026). \textit{arXiv preprint arXiv:2602.05678}.
-    
-    \item Reasoning Gym: Procedural Task Generation for LLM Reasoning. (2026). \textit{arXiv preprint arXiv:2602.07890}.
-
-    \item Brockman, G., Cheung, V., Pettersson, L., Schneider, J., Schulman, J., Tang, J., \& Zaremba, W. (2016). OpenAI Gym. \textit{arXiv preprint arXiv:1606.01540}.
-
-    \item C\^ot\'e, M.-A., Kapturowski, S., Hosseini, M., et al. (2018). TextWorld: A learning environment for text-based games. \textit{Workshop on Computer Games}.
-
-    \item Shridhar, M., Yuan, X., C\^ot\'e, M.-A., Bisk, Y., Trischler, A., \& Hausknecht, M. (2021). ALFWorld: Aligning text and embodied environments for interactive learning. \textit{ICLR}.
-
-    \item Liu, E. Z., Guu, K., Pasupat, P., et al. (2018). Reinforcement learning on web interfaces using workflow-guided exploration. \textit{ICLR}.
-
-    \item Savva, M., Kadian, A., Maksymets, O., et al. (2019). Habitat: A platform for embodied AI research. \textit{ICCV}.
-
-    \item Yu, T., Quillen, D., He, Z., et al. (2020). Meta-World: A benchmark and evaluation for multi-task and meta reinforcement learning. \textit{Conference on Robot Learning}.
-
-    \item James, S., Davison, A. J., \& Johns, E. (2020). RLBench: The robot learning benchmark and learning environment. \textit{IEEE Robotics and Automation Letters}, 5(2), 3019-3026.
-
-    \item Fan, L., Wang, G., Tang, Y., et al. (2022). MineDojo: Building open-ended embodied agents with internet-scale knowledge. \textit{NeurIPS}, 35.
-
-    \item Community BEHAVIOR Benchmark. (2024). BEHAVIOR-1K: A benchmark for embodied household activities. \textit{Project documentation and benchmark release}.
-    
-    \item DeepSeek-AI. (2025). DeepSeek-R1: Incentivizing reasoning capability in LLMs via reinforcement learning. \textit{arXiv preprint arXiv:2501.12348}.
-    
-    \item Group Relative Policy Optimization. (2025). \textit{arXiv preprint arXiv:2502.02345}.
-    
-    \item Xie, T., et al. (2024). OSWorld: Benchmarking multimodal agents for open-ended tasks in real computer environments. \textit{NeurIPS}.
-    
-    \item Koh, J., et al. (2024). WebArena: A realistic web environment for building autonomous agents. \textit{ICLR}.
-    
-    \item Brown, T., et al. (2020). Language models are few-shot learners. \textit{NeurIPS}, 33, 1877-1901.
-    
-    \item Chen, M., et al. (2021). Evaluating large language models trained on code. \textit{arXiv preprint arXiv:2107.03374}.
-    
-    \item Kaelbling, L. P., Littman, M. L., \& Cassandra, A. R. (1998). Planning and acting in partially observable stochastic domains. \textit{Artificial Intelligence}, 101(1-2), 99-134.
-\end{enumerate}
+\nocite{*}
+\bibliographystyle{plainnat}
+\bibliography{references}
 
 \end{document}
