@@ -22,8 +22,6 @@
 \usepackage{listings}
 \usepackage{fancyvrb}
 \usepackage{tikz}
-\usepackage{pgfplots}
-\pgfplotsset{compat=1.18}
 \usepackage{float}
 \usepackage{microtype}
 \usepackage{enumitem}
@@ -82,7 +80,7 @@
 \graphicspath{{figures/}}
 
 % Title
-\title{\textbf{The Environment Layer: Infrastructure and Empirical Evaluation for Agentic AI Training}}
+\title{\textbf{The Environment Layer: Building Infrastructure for Agentic AI Training}}
 \date{\today}
 \author{
   Fei Wang \\
@@ -100,14 +98,14 @@
 \maketitle
 
 % Keywords
-\keywords{Agentic AI, Reinforcement Learning Environments, RL Gyms, Environment Design, Synthetic Environments, Sim-to-Real Transfer, POMDP, Environment Infrastructure, Empirical Evaluation, Environment Quality Framework}
+\keywords{Agentic AI, Reinforcement Learning Environments, RL Gyms, Environment Design, Synthetic Environments, Sim-to-Real Transfer, POMDP, Environment Infrastructure}
 
 \begin{abstract}
 The emergence of Agentic Reinforcement Learning (Agentic RL) has created an urgent need for sophisticated training environments that go beyond traditional RL benchmarks. While conventional LLM-RL operates within single-step MDPs, Agentic RL requires environments supporting multi-turn interactions, tool integration, and verifiable reward signals. This white paper argues that \textbf{RL environments are the foundational infrastructure for agentic AI}---the critical layer that determines what capabilities agents can learn and how reliably they transfer to deployment.
 
 We present a comprehensive analysis of the environment layer, organized around three core questions: (1) \textbf{Environment Design}---what makes an effective Agentic RL environment, including observation spaces, action interfaces, and reward mechanisms; (2) \textbf{Environment Infrastructure}---the frameworks, protocols, and tools for building and deploying environments at scale; and (3) \textbf{Environment Quality}---methodologies for evaluating environment fidelity, the sim-to-real gap, and production readiness.
 
-We survey the ecosystem of environment frameworks (OpenEnv, GEM, MCP), synthetic environment generation pipelines (Agent World Model, Reasoning Gym), and specialized environments for embodied AI (NVIDIA Cosmos, Isaac Sim). We introduce the Environment Quality Framework (EQF) for systematic environment evaluation and analyze the critical sim-to-real gap through the User-Sim Index. We validate our frameworks empirically by benchmarking three frontier models (GPT-4o, Claude Sonnet 4, Gemini 2.5 Pro) on AWM and Reasoning Gym environments, reporting per-capability success rates, trajectory degradation curves, and operational cost profiles. We further formalize the EQF with a quantitative scoring rubric and demonstrate that higher-EQF environments produce more discriminative evaluations. Finally, we present a research agenda for next-generation RL environments that will enable the transition from research prototypes to production-ready agentic systems.
+We survey the ecosystem of environment frameworks (OpenEnv, GEM, MCP), synthetic environment generation pipelines (Agent World Model, Reasoning Gym), and specialized environments for embodied AI (NVIDIA Cosmos, Isaac Sim). We introduce the Environment Quality Framework (EQF) for systematic environment evaluation and analyze the critical sim-to-real gap through the User-Sim Index. Finally, we present a research agenda for next-generation RL environments that will enable the transition from research prototypes to production-ready agentic systems.
 \end{abstract}
 
 \tableofcontents

@@ -43,11 +43,9 @@ This white paper provides a comprehensive analysis of the environment layer for 
     \item \textbf{Environment Infrastructure} (Sections 4-7): What frameworks, protocols, and tools exist for building and deploying environments? We survey the ecosystem of environment frameworks, synthetic generation pipelines, and specialized environments for embodied AI.
     
     \item \textbf{Environment Quality} (Sections 8-10): How do we evaluate and improve environment fidelity? We analyze the sim-to-real gap, algorithmic considerations for environment-aware training, and production readiness frameworks.
-
-    \item \textbf{Empirical Validation} (Sections 11-12): We benchmark three frontier models on AWM and Reasoning Gym, reporting per-capability success rates, operational cost profiles, and trajectory degradation curves. We formalize the Environment Quality Framework (EQF) with a quantitative scoring rubric and demonstrate that higher-EQF environments produce more discriminative evaluations.
 \end{enumerate}
 
-Section 13 concludes with a research agenda for next-generation RL environments. We argue that the path to production-ready agentic systems runs through the environment layer---and that investment in environment infrastructure will yield compounding returns across the entire Agentic AI stack.
+Section 11 concludes with a research agenda for next-generation RL environments. We argue that the path to production-ready agentic systems runs through the environment layer---and that investment in environment infrastructure will yield compounding returns across the entire Agentic AI stack.
 
 \begin{figure}[tbp]
     \centering
@@ -446,7 +444,7 @@ Progress in Agentic Reinforcement Learning is best understood through a systemat
 
 \subsection{Core Agentic Capabilities}
 
-The transition from passive language models to autonomous agents requires the development of five interconnected capabilities: planning, tool use, memory, self-improvement, and reasoning. Each capability represents a distinct dimension of agency that must be cultivated through appropriate training environments and reinforcement learning algorithms. Importantly, these capabilities are not independent; recent empirical work by \citet{ritchie2026hierarchy} demonstrates that they form a \emph{hierarchy} in practice. Evaluating frontier models on 150 realistic workplace tasks in an e-commerce environment, they identify five ordered levels---tool use, planning and goal formation, adaptability, groundedness, and common-sense reasoning---where failures cluster predictably: weaker models fail predominantly at lower levels (tool invocation and planning), while even the strongest models concentrate failures at the highest levels (groundedness and common-sense reasoning). This hierarchical structure suggests that training environments and curricula should be designed to build capabilities incrementally, ensuring mastery at each level before progressing to the next.
+The transition from passive language models to autonomous agents requires the development of five interconnected capabilities: planning, tool use, memory, self-improvement, and reasoning. Each capability represents a distinct dimension of agency that must be cultivated through appropriate training environments and reinforcement learning algorithms.
 
 \subsubsection{Planning}
 
@@ -490,7 +488,7 @@ Self-improvement represents the meta-capability that enables agents to enhance t
 
 \subsubsection{Reasoning}
 
-Reasoning capabilities enable agents to perform explicit, verifiable inference steps that lead to correct conclusions. Unlike implicit pattern matching, reasoning produces interpretable chains of thought that can be validated and debugged. Notably, common-sense reasoning---the ability to make contextually appropriate inferences beyond explicit instructions using world knowledge---has been identified as the frontier challenge for current models. \citet{ritchie2026hierarchy} find that even GPT-5.2 fails on tasks requiring contextual inference (e.g., recognizing that ``package showed up'' indicates a return rather than a cancellation), suggesting that this capability resists the targeted training interventions that have proven effective for lower-level skills like tool use and planning.
+Reasoning capabilities enable agents to perform explicit, verifiable inference steps that lead to correct conclusions. Unlike implicit pattern matching, reasoning produces interpretable chains of thought that can be validated and debugged.
 
 \textbf{Chain-of-Thought} reasoning involves generating explicit intermediate steps between problem statement and solution. This approach, often implemented through \texttt{<think>} tags or similar mechanisms, makes the reasoning process visible and subject to process-level supervision.
 
@@ -1388,7 +1386,7 @@ The Agent World Model (AWM) represents a breakthrough in synthetic environment g
 
 \textbf{Step 3: Tool Interface Definition.} AWM automatically generates API interfaces and tool descriptions that agents use to interact with synthetic databases. These interfaces follow OpenAPI specifications and include natural language documentation, enabling agents to discover and invoke appropriate tools based on task requirements.
 
-\textbf{Step 4: Task Generation with Verifiable Goals.} The pipeline procedurally generates task specifications with objectively verifiable completion criteria. Unlike open-ended generation tasks, these have deterministic success conditions---specific query results, data modifications, or analytical conclusions automatically checked against database state. This verifiability provides clear reward signals for successful agent behaviors. An important complementary perspective comes from the Corecraft environment \citep{ritchie2026hierarchy}, which adopts a \emph{task-centric} design philosophy: ``tasks provide useful training and evaluation signal, while entities and tools exist to support tasks.'' Rather than maximizing entity counts or schema complexity, Corecraft optimizes for realistic, challenging tasks designed by domain experts with actual customer support experience. This approach demonstrates that procedurally generated environments benefit significantly from human domain expertise in task design, producing failure modes that purely automated pipelines may miss.
+\textbf{Step 4: Task Generation with Verifiable Goals.} The pipeline procedurally generates task specifications with objectively verifiable completion criteria. Unlike open-ended generation tasks, these have deterministic success conditions---specific query results, data modifications, or analytical conclusions automatically checked against database state. This verifiability provides clear reward signals for successful agent behaviors.
 
 \textbf{Step 5: Environment Packaging and Distribution.} Finally, complete environments are packaged with containerized execution environments, ensuring reproducible deployment. Each environment includes initialized database state, tool implementations, task specifications, and reward verification logic.
 
@@ -1720,7 +1718,7 @@ The sim-to-real gap carries profound implications for how agentic systems are tr
 
 The sim-to-real gap represents a critical risk factor in the transition from research to production deployment of agentic AI systems. Organizations deploying agents trained primarily in simulated environments should anticipate performance degradation when systems encounter real users. This gap necessitates several mitigation strategies:
 
-\textbf{Progressive Deployment with Human Oversight:} Initial deployments should incorporate human-in-the-loop monitoring to identify failure modes that did not manifest during simulation training. Gradual autonomy increases should be contingent on demonstrated performance with real users rather than simulated benchmarks. The necessity of this approach is underscored by \citet{ritchie2026hierarchy}, who find that even the best-performing frontier model (GPT-5.2) fails approximately 40\% of realistic workplace tasks in their Corecraft e-commerce environment, with failure patterns clustering systematically along their capability hierarchy. This approximately 40\% error rate explains why an estimated 74\% of deployed production agents rely on human-in-the-loop evaluation rather than fully autonomous operation.
+\textbf{Progressive Deployment with Human Oversight:} Initial deployments should incorporate human-in-the-loop monitoring to identify failure modes that did not manifest during simulation training. Gradual autonomy increases should be contingent on demonstrated performance with real users rather than simulated benchmarks.
 
 \textbf{Continuous Adaptation Mechanisms:} Production systems should include mechanisms for learning from real user interactions, allowing agents to adapt to the actual distribution of user behaviors rather than the simplified simulation distribution. Online learning and continual adaptation become essential capabilities for bridging the reality gap post-deployment.
 
@@ -1782,8 +1780,6 @@ In conclusion, the sim-to-real gap in user simulation represents one of the most
     \caption{The Environment Quality Framework (EQF) positions environments along three axes: \textbf{Fidelity}, \textbf{Diversity}, and \textbf{Verifiability}. The ``Quality Zone'' represents the ideal region for reliable training signals.}
     \label{fig:eqf}
 \end{figure}
-
-The EQF is formalized with quantitative scoring criteria in Section~\ref{sec:eqf-formal}.
 
 The transition from research prototypes to production-grade agentic systems demands rigorous evaluation frameworks extending far beyond traditional accuracy metrics. As AI agents assume consequential rolesfrom automating software engineering to managing financial transactionsthe gap between benchmark performance and real-world reliability has become critical. High-profile incidents have exposed this discrepancy: Replit's AI assistant deleted production databases, OpenAI's Operator made unauthorized purchases, and municipal chatbots provided illegal advice. This section introduces the CLASSic and CLEAR frameworks alongside four reliability dimensions derived from safety-critical engineering.
 
@@ -1908,7 +1904,7 @@ Production deployment requires infrastructure beyond evaluation frameworks:
 
 \textbf{Observability and tracing} capture interaction histories including reasoning chains and tool invocations. MCP and OpenEnv provide standardized instrumentation.
 
-\textbf{Human-in-the-loop integration} enables escalation for uncertain predictions, balancing automation with oversight. Empirical evidence from \citet{ritchie2026hierarchy} confirms this is not merely a precaution but an operational necessity: their evaluation of frontier models reveals that failure modes shift predictably as model capability increases---weaker models fail at basic tool invocation, while stronger models exhibit subtle groundedness and common-sense failures that are harder to detect without human judgment.
+\textbf{Human-in-the-loop integration} enables escalation for uncertain predictions, balancing automation with oversight.
 
 \textbf{Continuous evaluation pipelines} monitor production performance, detecting metric drift.
 
@@ -1952,344 +1948,10 @@ Research evaluating 14 agentic models reveals reliability gains lag behind capab
     \label{fig:timeline}
 \end{figure}
 
-%% ============================================================
-%% SECTION 11: EMPIRICAL EVALUATION
-%% ============================================================
-\section{Empirical Evaluation: Frontier Models on Agentic Environments}
-\label{sec:empirical}
 
-The preceding sections have surveyed the theoretical foundations, infrastructure, and evaluation frameworks for Agentic RL. In this section, we provide original empirical evidence by benchmarking three frontier models on two representative synthetic environment platforms---Agent World Model (AWM) and Reasoning Gym (RG)---and analyzing their performance through the lens of the capability taxonomy (Section~3), CLASSic framework (Section~10), and CLEAR metrics (Section~10).
+\section{ Conclusion}
 
-\subsection{Experimental Setup}
-
-\textbf{Models.} We evaluate three frontier models, each representing a major provider: GPT-4o (OpenAI), Claude Sonnet 4 (Anthropic), and Gemini 2.5 Pro (Google). These models were selected to span different architectural philosophies and training approaches while representing the current state of the art as of early 2026.
-
-\textbf{Environments.} We design eight task categories across AWM and Reasoning Gym, mapped to the five-capability taxonomy from Section~3. AWM tasks emphasize tool use and multi-step database interaction; Reasoning Gym tasks emphasize mathematical and logical reasoning. Table~\ref{tbl:task-capability-map} presents the mapping.
-
-\begin{table}[tbp]
-\centering
-\footnotesize
-\begin{tabularx}{\textwidth}{YYY}
-\toprule
-\textbf{Task Category} & \textbf{Environment} & \textbf{Primary Capabilities Tested} \\
-\midrule
-Simple DB Lookups & AWM & Tool Use \\
-Multi-step JOIN Queries & AWM & Planning, Tool Use \\
-Analytical Aggregation with Error Recovery & AWM & Reasoning, Self-Improvement \\
-Session-Persistent Multi-turn Manipulation & AWM & Memory, Planning \\
-Arithmetic and Algebra Puzzles & Reasoning Gym & Reasoning \\
-Constraint Satisfaction and Logic Grids & Reasoning Gym & Reasoning, Planning \\
-Graph Traversal and Search & Reasoning Gym & Planning, Memory \\
-Multi-step Proof Construction & Reasoning Gym & Reasoning, Self-Improvement \\
-\bottomrule
-\end{tabularx}
-\caption{Mapping of experimental task categories to the five-capability taxonomy (Section~3) and source environments.}
-\label{tbl:task-capability-map}
-\end{table}
-
-\textbf{Protocol.} Each model is evaluated on $N=50$ episodes per task category, yielding 400 episodes per model and 1,200 episodes total. All models use temperature $T=0.0$ for reproducibility. Each episode permits a maximum of 20 interaction turns. Models receive identical system prompts specifying available tools (for AWM tasks) or problem formats (for Reasoning Gym tasks). Success is evaluated via deterministic verification: SQL state checks for AWM and formal answer matching for Reasoning Gym. Per-episode cost is tracked via API billing; latency is measured as wall-clock time from first request to final response.
-
-\subsection{Per-Capability Success Rates}
-
-Table~\ref{tbl:model-capability-results} reports success rates aggregated by capability dimension. For each capability, we average over all task categories that test it (as defined in Table~\ref{tbl:task-capability-map}).
-
-\begin{table}[tbp]
-\centering
-\footnotesize
-\begin{tabularx}{\textwidth}{YYYYY}
-\toprule
-\textbf{Capability} & \textbf{GPT-4o} & \textbf{Claude Sonnet 4} & \textbf{Gemini 2.5 Pro} & \textbf{Average} \\
-\midrule
-Tool Use & -- & -- & -- & -- \\
-Planning & -- & -- & -- & -- \\
-Memory & -- & -- & -- & -- \\
-Reasoning & -- & -- & -- & -- \\
-Self-Improvement & -- & -- & -- & -- \\
-\midrule
-\textbf{Overall} & -- & -- & -- & -- \\
-\bottomrule
-\end{tabularx}
-\caption{Per-capability success rates (\%) across three frontier models. Values represent the mean success rate over all task categories testing each capability ($N=50$ episodes per category). Placeholder values (--) to be filled with experimental results.}
-\label{tbl:model-capability-results}
-\end{table}
-
-\begin{figure}[tbp]
-    \centering
-    \begin{tikzpicture}[
-        scale=1.0
-    ]
-    % Radar chart: 5 axes (Pentagon)
-    % Angles: 90, 162, 234, 306, 378(=18) degrees
-    \def\naxes{5}
-    \def\maxval{100}
-    \def\levels{4} % grid levels: 25, 50, 75, 100
-
-    % Axis labels and angles
-    \def\axislabels{{"Tool Use","Planning","Memory","Reasoning","Self-Improv."}}
-
-    % Draw grid pentagons
-    \foreach \l in {1,...,\levels} {
-        \def\r{\l*0.8}
-        \draw[gray!25, thin]
-            ({90}:{\r}) \foreach \i in {1,...,4} { -- ({90+\i*72}:{\r})} -- cycle;
-    }
-
-    % Draw axes
-    \foreach \i in {0,...,4} {
-        \draw[gray!40, thin] (0,0) -- ({90+\i*72}:3.2);
-        \pgfmathsetmacro{\ang}{90+\i*72}
-        \pgfmathtruncatemacro{\idx}{\i}
-        % Labels
-        \pgfmathsetmacro{\lrad}{3.6}
-        \node[font=\scriptsize\sffamily, align=center] at ({\ang}:{\lrad}) {\pgfmathparse{\axislabels[\idx]}\pgfmathresult};
-    }
-
-    % Grid level labels (on first axis)
-    \foreach \l/\v in {1/25, 2/50, 3/75, 4/100} {
-        \node[font=\tiny, text=gray!50, anchor=south west] at ({90}:{\l*0.8}) {\v};
-    }
-
-    % Placeholder model polygons (to be filled with real data)
-    % GPT-4o (blue) -- example placeholder at ~70% across all
-    \draw[blue!70, thick, fill=blue!10, opacity=0.4]
-        ({90}:{0.7*3.2}) \foreach \i in {1,...,4} { -- ({90+\i*72}:{0.7*3.2})} -- cycle;
-    % Claude Sonnet 4 (orange) -- example placeholder at ~65%
-    \draw[orange!70, thick, fill=orange!10, opacity=0.4]
-        ({90}:{0.65*3.2}) \foreach \i in {1,...,4} { -- ({90+\i*72}:{0.65*3.2})} -- cycle;
-    % Gemini 2.5 Pro (green) -- example placeholder at ~55%
-    \draw[green!60!black, thick, fill=green!10, opacity=0.4]
-        ({90}:{0.55*3.2}) \foreach \i in {1,...,4} { -- ({90+\i*72}:{0.55*3.2})} -- cycle;
-
-    % Legend
-    \node[font=\scriptsize\sffamily, blue!70] at (4.5, 1.0) {--- GPT-4o};
-    \node[font=\scriptsize\sffamily, orange!70] at (4.5, 0.5) {--- Claude Sonnet 4};
-    \node[font=\scriptsize\sffamily, green!60!black] at (4.5, 0.0) {--- Gemini 2.5 Pro};
-
-    \end{tikzpicture}
-    \caption{Capability radar showing per-capability success rates for each model. Polygon vertices correspond to the five agentic capabilities; larger area indicates stronger overall performance. Placeholder geometry shown; vertices will be positioned according to experimental results in Table~\ref{tbl:model-capability-results}.}
-    \label{fig:capability-radar}
-\end{figure}
-
-The radar chart in Figure~\ref{fig:capability-radar} visualizes the capability profiles of each model. We expect the results to reveal whether the hierarchical pattern identified by \citet{ritchie2026hierarchy}---where tool use succeeds most often and common-sense reasoning lags---holds across both tool-centric (AWM) and reasoning-centric (Reasoning Gym) environments. Divergences between environments would indicate that the capability hierarchy is environment-dependent, with important implications for training curriculum design.
-
-\subsection{Environment-Level Performance and Operational Costs}
-
-Table~\ref{tbl:model-env-classic} reports environment-level results alongside CLASSic operational dimensions, directly validating the framework introduced in Section~10.
-
-\begin{table}[tbp]
-\centering
-\footnotesize
-\begin{tabularx}{\textwidth}{YYYYYY}
-\toprule
-\textbf{Model} & \textbf{Environment} & \textbf{Success (\%)} & \textbf{Avg.\ Cost (\$)} & \textbf{Avg.\ Latency (s)} & \textbf{Avg.\ Steps} \\
-\midrule
-GPT-4o & AWM & -- & -- & -- & -- \\
-GPT-4o & Reasoning Gym & -- & -- & -- & -- \\
-Claude Sonnet 4 & AWM & -- & -- & -- & -- \\
-Claude Sonnet 4 & Reasoning Gym & -- & -- & -- & -- \\
-Gemini 2.5 Pro & AWM & -- & -- & -- & -- \\
-Gemini 2.5 Pro & Reasoning Gym & -- & -- & -- & -- \\
-\bottomrule
-\end{tabularx}
-\caption{Environment-level performance with CLASSic operational dimensions. Avg.\ Cost reflects API billing per episode; Avg.\ Latency is wall-clock time per episode; Avg.\ Steps is the mean number of interaction turns. Placeholder values (--) to be filled with experimental results.}
-\label{tbl:model-env-classic}
-\end{table}
-
-This table enables direct comparison of cost-accuracy tradeoffs: models that achieve higher success rates at lower cost per episode represent more efficient agentic architectures. We anticipate that AWM tasks, which require more tool invocations, will exhibit higher per-episode costs and latencies than Reasoning Gym tasks, which are primarily computation-bound. These operational differences highlight why CLASSic evaluation must be environment-aware rather than treating all task types uniformly.
-
-\subsection{Trajectory Analysis: Performance Over Horizon Length}
-
-A key prediction of the CLEAR framework is that agent performance degrades exponentially over trajectory length, as captured by the Cumulative Navigation Accuracy (CNA) metric. Figure~\ref{fig:cna-degradation} tests this prediction by plotting success rates as a function of the number of interaction steps required.
-
-\begin{figure}[tbp]
-    \centering
-    \begin{tikzpicture}
-    \begin{axis}[
-        width=0.85\textwidth,
-        height=6cm,
-        xlabel={Trajectory Length (interaction steps)},
-        ylabel={Cumulative Success Rate (\%)},
-        xmin=0, xmax=21,
-        ymin=0, ymax=100,
-        xtick={1,3,5,10,15,20},
-        ytick={0,20,40,60,80,100},
-        legend pos=north east,
-        legend style={font=\footnotesize\sffamily},
-        grid=major,
-        grid style={gray!20},
-        tick label style={font=\footnotesize},
-        label style={font=\small\sffamily}
-    ]
-    % Placeholder curves showing expected exponential degradation
-    % GPT-4o (blue)
-    \addplot[blue!70, thick, mark=*, mark size=1.5pt] coordinates {
-        (1,95) (3,82) (5,71) (10,54) (15,40) (20,30)
-    };
-    % Claude Sonnet 4 (orange)
-    \addplot[orange!70, thick, mark=square*, mark size=1.5pt] coordinates {
-        (1,92) (3,78) (5,67) (10,48) (15,35) (20,25)
-    };
-    % Gemini 2.5 Pro (green)
-    \addplot[green!60!black, thick, mark=triangle*, mark size=1.5pt] coordinates {
-        (1,88) (3,72) (5,58) (10,38) (15,24) (20,16)
-    };
-    \legend{GPT-4o, Claude Sonnet 4, Gemini 2.5 Pro}
-    \end{axis}
-    \end{tikzpicture}
-    \caption{Performance degradation over trajectory length, validating the CNA metric from the CLEAR framework (Section~10). All models exhibit the predicted exponential decay in cumulative success rate as trajectory length increases. Placeholder curves shown; to be updated with experimental measurements.}
-    \label{fig:cna-degradation}
-\end{figure}
-
-The CNA for each model at horizon $T$ is computed as $\text{CNA}_T = \left(\prod_{t=1}^{T} p_t\right)^{1/T}$, where $p_t$ is the probability of correct action at step $t$. A model with 95\% single-step accuracy but CNA$_{20} = 0.30$ would confirm that traditional single-step benchmarks vastly overestimate long-horizon capability---a critical insight for production deployment decisions.
-
-\subsection{Implications for Environment Design}
-
-The empirical results yield several actionable insights for environment design:
-
-\textbf{Capability-environment interaction.} Different environments expose different capability weaknesses. AWM tasks primarily stress tool use and planning, while Reasoning Gym tasks stress reasoning and self-improvement. A comprehensive evaluation requires both types, validating the EQF's diversity axis.
-
-\textbf{Operational cost awareness.} The CLASSic dimensions reveal that accuracy alone is insufficient for deployment decisions. A model achieving 5\% higher accuracy at 3$\times$ the cost may not be the optimal choice for production. Environment designers should instrument cost and latency tracking alongside task success.
-
-\textbf{Horizon-dependent evaluation.} The CNA degradation curves demonstrate that single-step or short-horizon benchmarks systematically overestimate agent capability. Environment designers should ensure task distributions include long-horizon challenges (10+ steps) to produce realistic performance estimates.
-
-\textbf{Validation of the capability hierarchy.} The per-capability analysis tests whether the hierarchy identified by \citet{ritchie2026hierarchy}---tool use $>$ planning $>$ adaptability $>$ groundedness $>$ common-sense reasoning---generalizes across environment types or is environment-specific. Environment-specific hierarchies would suggest that training curricula should be tailored to the target deployment domain rather than following a universal progression.
-
-%% ============================================================
-%% SECTION 12: FORMALIZED EQF
-%% ============================================================
-\section{The Environment Quality Framework: A Formal Scoring Rubric}
-\label{sec:eqf-formal}
-
-Section~10 introduced the Environment Quality Framework (EQF) as a qualitative positioning of environments along three axes: Fidelity, Diversity, and Verifiability (Figure~\ref{fig:eqf}). In this section, we formalize the EQF with precise definitions, a quantitative scoring rubric, and a composite metric, then apply it to representative environments and correlate the scores with the empirical benchmark results from Section~\ref{sec:empirical}.
-
-\subsection{Axis Definitions}
-
-\begin{definition}[Fidelity $\mathcal{F}$]
-The degree to which an environment's state transitions, observations, reward dynamics, and interaction patterns faithfully replicate the target deployment domain. High-fidelity environments minimize the sim-to-real gap by capturing edge cases, stochastic dynamics, and realistic user behaviors.
-\end{definition}
-
-\begin{definition}[Diversity $\mathcal{D}$]
-The breadth and variation of tasks, states, and interaction patterns an environment can generate. High-diversity environments support procedural generation, curriculum learning, and coverage of the full capability taxonomy, ensuring agents generalize rather than memorize.
-\end{definition}
-
-\begin{definition}[Verifiability $\mathcal{V}$]
-The extent to which task success can be objectively and automatically determined without human judgment. High-verifiability environments provide deterministic reward signals through formal correctness proofs, database state checks, or automated test suites.
-\end{definition}
-
-\subsection{Scoring Rubric}
-
-Table~\ref{tbl:eqf-rubric} defines anchor points at four levels for each axis. Intermediate scores are assigned by interpolation.
-
-\begin{table}[tbp]
-\centering
-\footnotesize
-\begin{tabularx}{\textwidth}{cYYY}
-\toprule
-\textbf{Score} & \textbf{Fidelity ($\mathcal{F}$)} & \textbf{Diversity ($\mathcal{D}$)} & \textbf{Verifiability ($\mathcal{V}$)} \\
-\midrule
-1 & No resemblance to target domain; toy dynamics only & Single fixed task instance; no variation & No automated evaluation; requires expert human review \\[4pt]
-4 & Key dynamics approximated with significant simplifications & 10--50 task variants with limited parameter variation & Partial automation; some tasks require human judgment \\[4pt]
-7 & Realistic dynamics with minor gaps; captures common edge cases & 100+ procedurally generated variants across sub-domains & Fully automated for primary metrics; edge cases may need review \\[4pt]
-10 & Indistinguishable from deployment; validated via sim-to-real transfer studies & Infinite procedural generation with curriculum support and domain coverage & Deterministic automated verification with formal correctness guarantees \\
-\bottomrule
-\end{tabularx}
-\caption{EQF scoring rubric defining anchor points on the 1--10 scale for each axis. Intermediate scores are assigned by interpolation between adjacent anchors.}
-\label{tbl:eqf-rubric}
-\end{table}
-
-\subsection{Composite EQF Score}
-
-We define the composite EQF score as the geometric mean of the three axis scores:
-
-$$
-\text{EQF}_{\text{composite}} = \left(\mathcal{F} \cdot \mathcal{D} \cdot \mathcal{V}\right)^{1/3}
-$$
-
-The geometric mean is preferred over the arithmetic mean because it penalizes imbalance: an environment that scores 10 on Fidelity but 1 on Verifiability (composite $= (10 \cdot 5 \cdot 1)^{1/3} = 3.68$) is appropriately rated lower than a balanced environment scoring 5 across all axes (composite $= 5.0$). This reflects the practical reality that a critical deficiency in any single dimension undermines the environment's overall utility for training and evaluation.
-
-\subsection{Scoring Existing Environments}
-
-Table~\ref{tbl:eqf-scores} applies the rubric to the seven representative environments from Figure~\ref{fig:eqf}. Scores are assigned by the authors based on the rubric criteria and available documentation for each environment.
-
-\begin{table}[tbp]
-\centering
-\footnotesize
-\begin{tabularx}{\textwidth}{YYYYY}
-\toprule
-\textbf{Environment} & \textbf{Fidelity ($\mathcal{F}$)} & \textbf{Diversity ($\mathcal{D}$)} & \textbf{Verifiability ($\mathcal{V}$)} & \textbf{EQF$_{\text{composite}}$} \\
-\midrule
-AWM & 8 & 9 & 10 & 8.96 \\
-Reasoning Gym & 5 & 9 & 10 & 7.66 \\
-SWE-Bench & 9 & 7 & 6 & 7.26 \\
-Isaac Sim & 9 & 5 & 7 & 6.80 \\
-WebArena & 7 & 5 & 5 & 5.59 \\
-Static Datasets & 8 & 2 & 3 & 3.63 \\
-Toy Simulations & 2 & 2 & 4 & 2.52 \\
-\bottomrule
-\end{tabularx}
-\caption{EQF scores for representative environments. Scores follow the rubric in Table~\ref{tbl:eqf-rubric}. AWM achieves the highest composite score due to SQL-backed verifiability ($\mathcal{V}=10$) and procedural diversity ($\mathcal{D}=9$). Environments are ordered by composite score.}
-\label{tbl:eqf-scores}
-\end{table}
-
-Several patterns emerge. AWM's SQL-backed architecture provides perfect verifiability ($\mathcal{V}=10$) since task success can be checked deterministically against database state. Reasoning Gym matches AWM in diversity and verifiability but scores lower on fidelity ($\mathcal{F}=5$) because procedural math and logic puzzles, while valuable for training, do not directly model real-world deployment dynamics. SWE-Bench scores highest on fidelity ($\mathcal{F}=9$) because its tasks derive from real GitHub issues, but moderate verifiability ($\mathcal{V}=6$) reflects the difficulty of fully automated code correctness assessment. Static datasets and toy simulations cluster at the bottom, confirming the qualitative assessment in Figure~\ref{fig:eqf}.
-
-\subsection{Correlation with Empirical Benchmark Discriminability}
-
-We define \emph{discriminability} as the standard deviation of model success rates on a given environment: higher discriminability indicates that the environment better differentiates model capabilities rather than producing uniformly high or low scores.
-
-\begin{figure}[tbp]
-    \centering
-    \begin{tikzpicture}
-    \begin{axis}[
-        width=0.75\textwidth,
-        height=6cm,
-        xlabel={EQF Composite Score},
-        ylabel={Model Discriminability (Std.\ Dev.\ of Success \%)},
-        xmin=2, xmax=10,
-        ymin=0, ymax=20,
-        grid=major,
-        grid style={gray!20},
-        tick label style={font=\footnotesize},
-        label style={font=\small\sffamily},
-        clip=false
-    ]
-    % Placeholder points for AWM and RG (from Section 11 experiments)
-    \addplot[only marks, mark=*, mark size=3pt, blue!70] coordinates {
-        (8.96, 12)
-        (7.66, 9)
-    };
-    % Labels
-    \node[font=\scriptsize\sffamily, anchor=south west] at (axis cs:8.96,12) {AWM};
-    \node[font=\scriptsize\sffamily, anchor=south west] at (axis cs:7.66,9) {Reasoning Gym};
-
-    % Estimated points for other environments (from published benchmarks)
-    \addplot[only marks, mark=o, mark size=2.5pt, gray!60] coordinates {
-        (7.26, 8)
-        (6.80, 7)
-        (5.59, 5)
-        (3.63, 3)
-        (2.52, 2)
-    };
-    \node[font=\tiny\sffamily, text=gray!60, anchor=south west] at (axis cs:7.26,8) {SWE-Bench};
-    \node[font=\tiny\sffamily, text=gray!60, anchor=south west] at (axis cs:6.80,7) {Isaac Sim};
-    \node[font=\tiny\sffamily, text=gray!60, anchor=south east] at (axis cs:5.59,5) {WebArena};
-    \node[font=\tiny\sffamily, text=gray!60, anchor=south east] at (axis cs:3.63,3) {Static};
-    \node[font=\tiny\sffamily, text=gray!60, anchor=south east] at (axis cs:2.52,2) {Toy};
-
-    % Trend line (placeholder)
-    \addplot[red!50, dashed, thick, domain=2:10] {1.5*x - 2};
-
-    \end{axis}
-    \end{tikzpicture}
-    \caption{Relationship between EQF composite score and benchmark discriminability. Blue points represent environments from Section~\ref{sec:empirical} (AWM, Reasoning Gym); gray points are estimates for other environments based on published benchmarks. The positive trend (dashed line) suggests that higher-quality environments produce more informative evaluations. Placeholder values; to be updated with experimental measurements.}
-    \label{fig:eqf-correlation}
-\end{figure}
-
-Figure~\ref{fig:eqf-correlation} plots EQF composite scores against discriminability. The positive correlation supports the hypothesis that higher-quality environments---particularly those with strong verifiability---produce more informative and discriminative benchmarks. Environments with low EQF scores (toy simulations, static datasets) tend to produce uniformly low or high scores across models, providing little signal for differentiating capabilities. This finding has practical implications: \emph{organizations evaluating agentic systems should prioritize high-EQF environments to obtain reliable comparative assessments}, rather than relying on convenient but low-quality benchmarks that may give misleadingly uniform results.
-
-The correlation between EQF scores and discriminability also connects to the sim-to-real gap analysis in Section~9. Low-fidelity environments with inflated success rates (the ``easy mode'' phenomenon) correspond to low-EQF scores, while environments that expose meaningful performance differences correspond to higher EQF scores. The EQF thus provides a practical diagnostic: before trusting benchmark results, evaluate the benchmark environment itself.
-
-\section{ Conclusion} in artificial intelligencea paradigm shift as consequential as the transition from symbolic AI to deep learning, or from narrow supervised learning to general-purpose foundation models. This white paper has traced the contours of this transformation, from its theoretical foundations in POMDP formalism to the practical infrastructure required for production deployment. As we reflect on the landscape surveyed across these sections, several key insights crystallize that illuminate both the current state and future trajectory of the field.
+The emergence of Agentic Reinforcement Learning represents a fundamental inflection point in artificial intelligencea paradigm shift as consequential as the transition from symbolic AI to deep learning, or from narrow supervised learning to general-purpose foundation models. This white paper has traced the contours of this transformation, from its theoretical foundations in POMDP formalism to the practical infrastructure required for production deployment. As we reflect on the landscape surveyed across these sections, several key insights crystallize that illuminate both the current state and future trajectory of the field.
 
 \subsection{Summary of Key Contributions}
 
@@ -2306,8 +1968,6 @@ Embodied AI, explored in Section 6, extends the agentic paradigm beyond the digi
 Perhaps most critically, Section 7 addresses the dataset ceiling that threatens to constrain AI progress. Synthetic environment generation through Agent World Model and Reasoning Gym offers a scalable, controllable alternative to finite human annotation pipelines. By procedurally generating infinite varieties of task environments with verifiable rewards, these systems enable continuous model improvement without dependence on exhaustible data sources. The SQL-backed architecture of AWM and the curriculum learning mechanisms of RG represent foundational innovations that will sustain the field's growth.
 
 The algorithmic advances detailed in Section 8 tackle the fundamental credit assignment problem that has long plagued long-horizon RL. GRPO's critic-free design eliminates value estimation bias while reducing computational overhead. HGPO's hierarchical grouping preserves context consistency across multiple levels of abstraction. HCAPO leverages the LLM itself as a post-hoc critic, providing dense supervision signals even when environment rewards are sparse. SHADOW's dynamics-aware state grouping ensures that trajectories are compared only against others with similar transition dynamics, preventing misleading baseline comparisons.
-
-The empirical evaluation presented in Section 11 provides concrete evidence for the theoretical frameworks developed throughout this paper. By benchmarking three frontier models across AWM and Reasoning Gym, we demonstrate that the capability hierarchy identified by \citet{ritchie2026hierarchy} manifests consistently across environment types, and that operational dimensions (cost, latency) vary significantly by environment design. The CNA degradation curves confirm that single-step benchmarks systematically overestimate long-horizon capability, validating the CLEAR framework's emphasis on trajectory-level evaluation. The formalized EQF in Section 12 transforms the qualitative environment positioning of earlier sections into a quantitative rubric, enabling systematic comparison of environments and revealing that higher-quality environments produce more discriminative---and therefore more useful---evaluations.
 
 \subsection{The Path Toward ASI Through Agentic RL}
 
