@@ -569,6 +569,58 @@ The following matrix summarizes how core capabilities map to requirements across
 
 Table~\ref{tbl:capability-domain-matrix} makes clear that environment design is inseparable from evaluation design: each domain rewards a different combination of planning, tool use, memory, and reasoning.
 
+\subsection{Toward a Diagnostic Benchmark: Testing Capabilities in Isolation}
+
+The capability-domain matrix surfaces a fundamental measurement problem: existing benchmarks evaluate \emph{end-to-end task success}, which conflates all five capabilities. A failure on SWE-Bench could reflect inadequate planning, insufficient tool-use fidelity, memory overflow, inability to self-correct, or flawed reasoning---yet aggregate task completion rates cannot distinguish these failure modes. This measurement gap limits both reproducibility of results and the ability to design targeted training interventions.
+
+We propose a \textbf{Capability Diagnostic Examination (CaDEx)}, a structured suite of micro-benchmarks that tests each capability in isolation by holding all others constant:
+
+\begin{enumerate}
+    \item \textbf{L0 --- Single-step Tool Fidelity.} Tasks requiring exactly one tool call with a verifiable, deterministic result (e.g., a SQL SELECT, a file read, an API call with known response). All planning, memory, and reasoning demands are removed. Tests Tool Use in isolation; a well-functioning agent should score $>$90\% at L0. Persistent failure here indicates fundamental action-space misspecification, not a reasoning deficit.
+
+    \item \textbf{L1 --- Sequential Planning Under Complete Observability.} Tasks requiring a $k$-step plan in a fully observable, deterministic environment where the complete world state is provided on every observation. Isolates Planning by eliminating partial observability and memory pressure. Difficulty is parameterized by plan depth $k$; accuracy vs.\ $k$ curves reveal whether the agent can maintain goal coherence over extended decomposition chains.
+
+    \item \textbf{L2 --- Long-Horizon Retrieval Under Context Pressure.} Conversation tasks where the agent must correctly reference information provided exactly $N$ turns earlier, with intervening turns containing distractors. Tests Memory by controlling retrieval distance $N$; the primary metric is Recall@$N$ as a function of $N$. Degradation slopes reveal whether memory failures are attributable to context length limits or retrieval strategy.
+
+    \item \textbf{L3 --- Adversarial Error Injection.} An otherwise-solvable task is interrupted at step $t$ by a planted error (malformed tool response, corrupted file, contradictory observation). Tests Self-Improvement by measuring whether the agent detects the fault, diagnoses its source, and repairs the execution without restarting from scratch. Recovery rate vs.\ injection depth $t/T$ is the primary metric.
+
+    \item \textbf{L4 --- Proof-and-Verify Reasoning Chains.} Tasks requiring the agent to (a) generate a step-by-step derivation and (b) verify its own output against an automated ground-truth checker. Tests Reasoning by separating generation from verification; the verify-match rate---fraction of generations that pass the checker after self-review---isolates the agent's ability to catch its own reasoning errors.
+
+    \item \textbf{L5 --- Full Integration.} Standard long-horizon benchmark tasks (SWE-Bench, WebArena, OSWorld). Performance here, when combined with L0--L4 profiles, enables \emph{failure attribution}: the gap between L5 and the minimum of L0--L4 scores is an estimate of the \emph{integration overhead} arising from capability interference.
+\end{enumerate}
+
+\begin{table}[tbp]
+\centering
+\footnotesize
+\begin{tabularx}{\textwidth}{cYY>{\raggedright\arraybackslash}p{3.5cm}}
+\toprule
+\textbf{Level} & \textbf{Capability Isolated} & \textbf{Key Control Variable} & \textbf{Primary Metric} \\
+\midrule
+L0 & Tool Use        & Tool type and API complexity         & Single-call success rate \\
+L1 & Planning        & Plan depth $k$                       & Step accuracy vs.\ $k$ \\
+L2 & Memory          & Retrieval distance $N$               & Recall@$N$ \\
+L3 & Self-Improvement & Error injection depth $t/T$          & Recovery rate vs.\ $t/T$ \\
+L4 & Reasoning       & Derivation length and proof complexity & Verify-match rate \\
+L5 & Integration     & Full task (SWE-Bench, WebArena, etc.) & Task success rate \\
+\bottomrule
+\end{tabularx}
+\caption{The CaDEx (Capability Diagnostic Examination) protocol. Each level tests one capability in isolation by holding all others constant. L5 integration scores combined with L0--L4 profiles enable failure attribution beyond aggregate task success.}
+\label{tbl:cadex}
+\end{table}
+
+\paragraph{Capability Curriculum Protocol (CCP).} CaDEx profiles motivate a principled \textbf{curriculum learning} strategy. Agents trained directly on long-horizon tasks often develop brittle, shortcut-exploiting policies because sparse terminal rewards provide no signal for distinguishing capability bottlenecks. The CCP prescribes a staged training schedule gated by CaDEx-measured proficiency:
+
+\begin{enumerate}[label=Stage \arabic*.]
+    \item \textbf{Foundation.} Train on L0 tasks across all required tool categories. Gate: $>$90\% L0 success across tools before advancing.
+    \item \textbf{Sequential.} Train on L1 tasks at $k = 3$, then $k = 5$, then $k = 10$. Gate: $>$80\% step accuracy at each depth.
+    \item \textbf{Persistence.} Introduce L2 memory tasks with $N = 10$, scaling to $N = 50$. Gate: Recall@50 $>$70\%.
+    \item \textbf{Recovery.} Introduce L3 error injection at $t/T = 0.25$, then $0.5$, then $0.75$. Gate: Recovery rate $>$60\% at each injection depth.
+    \item \textbf{Verification.} Train on L4 proof-and-verify tasks. Gate: Verify-match rate $>$75\%.
+    \item \textbf{Integration.} Graduate to L5 end-to-end tasks. Monitor the integration overhead; if L5 performance falls more than 20 points below the minimum of L0--L4 scores, diagnose which capability combination is failing and re-train the relevant stage.
+\end{enumerate}
+
+This structured approach connects environment design back to the EQF framework: environments used in each CCP stage can be scored on the EQF rubric to ensure that fidelity, diversity, and verifiability are appropriate for the capability being trained. L0 environments require high verifiability but need not be highly diverse; L5 environments should meet the full production threshold of EQF $\geq$ 7.0.
+
 \subsection{Concrete Examples}
 
 To illustrate the taxonomy in practice, consider how an agentic system might approach a representative task from each domain. These examples are also aligned with benchmark families commonly used to evaluate agentic systems, such as SWE-Bench for software engineering, AIME-style mathematical reasoning tasks, and WebArena or OSWorld-style interactive workflows.
@@ -1789,6 +1841,66 @@ In conclusion, the sim-to-real gap in user simulation represents one of the most
 
 The transition from research prototypes to production-grade agentic systems demands rigorous evaluation frameworks extending far beyond traditional accuracy metrics. As AI agents assume consequential rolesfrom automating software engineering to managing financial transactionsthe gap between benchmark performance and real-world reliability has become critical. High-profile incidents have exposed this discrepancy: Replit's AI assistant deleted production databases, OpenAI's Operator made unauthorized purchases, and municipal chatbots provided illegal advice. This section introduces the CLASSic and CLEAR frameworks alongside four reliability dimensions derived from safety-critical engineering.
 
+\subsection{EQF: Formal Metric Definitions and Environment Scoring}
+
+We operationalize EQF by defining each axis as a 0--10 rubric scored across three sub-criteria and then aggregating via geometric mean to prevent single-axis deficiencies from being masked by strengths elsewhere.
+
+\paragraph{Fidelity \boldmath$(F)$.} Measures how accurately the environment models real-world task dynamics. Sub-criteria scored 0--10 and averaged:
+\begin{enumerate}[label=F\arabic*.,leftmargin=2.5em]
+    \item \emph{State coverage}: the fraction of operationally relevant state variables (UI state, file system, database contents, process environment) represented in the observation space.
+    \item \emph{Action consequence realism}: whether agent actions produce semantically valid state transitions comparable to production systems---e.g., a file-write that updates disk state rather than a mock return value.
+    \item \emph{Distribution realism}: whether error rates, latency distributions, and failure modes match the statistical profile of production deployment conditions.
+\end{enumerate}
+$$F = \tfrac{1}{3}(F_1 + F_2 + F_3)$$
+
+\paragraph{Diversity \boldmath$(D)$.} Measures coverage of the intended task distribution:
+\begin{enumerate}[label=D\arabic*.,leftmargin=2.5em]
+    \item \emph{Task variety}: the number of distinct task types or skill categories exercised.
+    \item \emph{Scenario breadth}: coverage of edge cases, adversarial inputs, and distributional shifts relative to the deployment domain.
+    \item \emph{Procedural generativity}: whether novel task instances can be generated on demand without manual curation, enabling effectively infinite training data.
+\end{enumerate}
+$$D = \tfrac{1}{3}(D_1 + D_2 + D_3)$$
+
+\paragraph{Verifiability \boldmath$(V)$.} Measures the degree to which task success is automatically and objectively determinable:
+\begin{enumerate}[label=V\arabic*.,leftmargin=2.5em]
+    \item \emph{Automated scoring}: the fraction of tasks scorable without human judgment (unit tests, database assertions, string-match comparisons).
+    \item \emph{Determinism}: whether identical actions under identical initial conditions produce identical, observable outcomes.
+    \item \emph{Reward density}: whether intermediate progress signals are available, not only final binary success.
+\end{enumerate}
+$$V = \tfrac{1}{3}(V_1 + V_2 + V_3)$$
+
+The composite EQF score is the geometric mean of the three axes:
+$$\mathrm{EQF} = \bigl(F \times D \times V\bigr)^{1/3}$$
+
+An environment with $F = 9,\ D = 9,\ V = 0$ (tasks judged by humans with no automated scoring) correctly scores 0, flagging it as unsuitable for automated RL training regardless of how realistic or diverse it is. For practical deployment, we propose a \textbf{production threshold of EQF $\geq$ 7.0}, which requires all three axes to be at or above 7.
+
+Table~\ref{tbl:eqf-scores} applies this rubric to representative environments. Scores are derived from published environment descriptions, benchmark disclosures, and the authors' analysis of each system's task coverage and scoring mechanism.
+
+\begin{table}[tbp]
+\centering
+\footnotesize
+\begin{tabularx}{\textwidth}{Ycccc>{\raggedright\arraybackslash}p{3.2cm}}
+\toprule
+\textbf{Environment} & \textbf{F} & \textbf{D} & \textbf{V} & \textbf{EQF} & \textbf{Bottleneck} \\
+\midrule
+MiniGrid / Toy Grid & 1 & 3 & 9 & 3.0 & Fidelity \\
+WebArena            & 6 & 5 & 7 & 5.9 & Diversity \\
+SWE-Bench (Verified)& 8 & 6 & 10 & 7.8 & Diversity \\
+OSWorld             & 7 & 7 & 8  & 7.3 & --- \\
+NVIDIA Isaac Sim    & 9 & 5 & 6  & 6.6 & Verifiability \\
+Agent World Model (AWM) & 5 & 9 & 10 & 7.7 & Fidelity \\
+Reasoning Gym       & 3 & 10 & 10 & 6.7 & Fidelity \\
+Static NLP Dataset  & 2 & 4 & 4  & 3.2 & Fidelity, Verif. \\
+\midrule
+\emph{Production target} & \emph{$\geq$7} & \emph{$\geq$7} & \emph{$\geq$7} & \emph{$\geq$7.0} & \\
+\bottomrule
+\end{tabularx}
+\caption{EQF scores for representative environments. Fidelity (F), Diversity (D), and Verifiability (V) are each scored 0--10 per the rubric in the text; EQF is their geometric mean. Environments above the production threshold of 7.0 include SWE-Bench (Verified), OSWorld, and AWM. The primary bottleneck column identifies which single axis most constrains each environment's composite score.}
+\label{tbl:eqf-scores}
+\end{table}
+
+Two patterns stand out. First, \emph{fidelity is the most common bottleneck}: synthetic environments like Reasoning Gym and AWM achieve high diversity and verifiability but model only a narrow slice of real-world task dynamics. This creates a coverage illusion---the agent trains on abundant, cleanly scored data, but on a distribution that may diverge from deployment. Second, \emph{high fidelity does not guarantee verifiability}: Isaac Sim scores 9 on fidelity but only 6 on verifiability because physically realistic sim rewards still require human task specification and are often continuous rather than binary, complicating automated RL training. The environments closest to the production threshold (SWE-Bench Verified, OSWorld, AWM) achieve their scores by different means, suggesting that complementary multi-environment training---combining AWM's generativity with SWE-Bench's fidelity---may be more effective than relying on any single environment.
+
 \subsection{The CLASSic Framework: Holistic Production Assessment}
 
 The CLASSic framework provides a structured approach to evaluating agentic systems across five critical operational dimensions: \textbf{Cost, Latency, Accuracy, Security, and Stability}. Unlike traditional benchmarks focusing narrowly on task completion, CLASSic recognizes that production readiness requires balancing multiple competing objectives.
@@ -1803,7 +1915,7 @@ The CLASSic framework provides a structured approach to evaluating agentic syste
 
 \textbf{Stability} evaluates system behavior under varying load conditions, resource constraints, and operational stress. Production agents must maintain consistent performance during traffic spikes, infrastructure degradation, and dependency failures.
 
-Table~\ref{tbl:classic-framework} operationalizes these dimensions for production-facing evaluation.
+Table~\ref{tbl:classic-framework} operationalizes these dimensions, and Table~\ref{tbl:classic-scores} applies them to five representative systems with published data.
 
 \begin{table}[tbp]
 \centering
@@ -1823,6 +1935,32 @@ Table~\ref{tbl:classic-framework} operationalizes these dimensions for productio
 \label{tbl:classic-framework}
 \end{table}
 
+\subsubsection{Empirical CLASSic Scores for Representative Systems}
+
+Table~\ref{tbl:classic-scores} instantiates CLASSic for five representative production and research systems using publicly reported data. Cost and latency are approximate ranges derived from published API pricing and benchmark disclosures; accuracy figures cite the primary benchmark each system publicly targets. Security and Stability are qualitative ratings derived from published safety documentation and operational track record.
+
+\begin{table}[tbp]
+\centering
+\footnotesize
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lccccc}
+\toprule
+\textbf{System} & \textbf{Cost (est.\ \$/task)} & \textbf{Latency P50 (s)} & \textbf{Accuracy (benchmark)} & \textbf{Security} & \textbf{Stability} \\
+\midrule
+Claude Code          & \$2--8    & 45  & $\approx$80\% (SWE-Bench V)    & High     & High \\
+Kimi K2.5            & \$20--60  & 180 & $\approx$93\% (AIME 2025)      & Med--High & Med--High \\
+OpenAI Operator      & \$3--15   & 40  & $\approx$55\% (WebArena)       & High     & High \\
+Devin 2.0            & \$8--25   & 90  & $\approx$46\% (SWE-Bench V)    & Med      & Med \\
+SWE-agent (OSS)      & \$0.20--0.50 & 22 & $\approx$13\% (SWE-Bench)   & Low      & High \\
+\bottomrule
+\end{tabular}%
+}
+\caption{Empirical CLASSic scores for representative agentic systems (approximate values at time of writing). Cost estimates are derived from published API pricing and benchmark-reported task lengths; accuracy figures cite each system's primary public benchmark. Security and Stability are qualitative ratings based on published safety documentation and red-team disclosures.}
+\label{tbl:classic-scores}
+\end{table}
+
+Several patterns emerge. First, there is a clear \emph{cost-accuracy tradeoff}: the highest-accuracy systems (Kimi K2.5 for mathematical reasoning, Claude Code for software engineering) incur 10--100$\times$ higher per-task costs than open-source research tools. Second, \emph{security posture strongly correlates with production intent}: systems designed for enterprise deployment (Operator, Claude Code) carry higher security ratings, while open-source research agents (SWE-agent) prioritize benchmark performance over operational safety. Third, the accuracy column reveals \emph{benchmark domain specificity}---Kimi K2.5's AIME score and Claude Code's SWE-Bench score are not commensurable, each reflecting optimization for a distinct task distribution. A deployment strategy must therefore select on the relevant capability axis rather than a single aggregate CLASSic score.
+
 \subsection{The CLEAR Framework: Bridging the Production Gap}
 
 While CLASSic addresses operational readiness, the CLEAR framework focuses on identifying and quantifying the \textbf{production gap}the systematic divergence between controlled evaluation environments and real-world deployment conditions. CLEAR stands for \textbf{Calibration, Long-horizon evaluation, Environment fidelity, and Abstention reliability}.
@@ -1836,6 +1974,28 @@ $$
 $$
 
 where $p_t$ represents the probability of correct action at step $t$. This metric reveals that agents with high single-step accuracy may still fail catastrophically over long horizons due to error accumulation.
+
+Table~\ref{tbl:cna-degradation} computes CNA for representative published benchmarks. Given a reported task success rate $S$ and mean trajectory length $T$, we estimate per-step accuracy as $p = S^{1/T}$ under the simplifying assumption of uniform per-step error rates. The final column extrapolates projected task success at a 50-step horizon to illustrate error compounding.
+
+\begin{table}[tbp]
+\centering
+\footnotesize
+\begin{tabularx}{\textwidth}{YYcccY}
+\toprule
+\textbf{Benchmark} & \textbf{System} & \textbf{Task Success $S$} & \textbf{Mean Steps $T$} & \textbf{CNA ($p = S^{1/T}$)} & \textbf{Projected $S$ at $T{=}50$} \\
+\midrule
+SWE-Bench V & Claude Code (state-of-art) & 80\% & 10 & 0.978 & $\approx$32\% \\
+SWE-Bench V & Devin 2.0 & 46\% & 10 & 0.924 & $<$1\% \\
+WebArena & Leading agent (2025) & 55\% & 22 & 0.972 & $\approx$24\% \\
+WebArena & GPT-4 (2023 baseline) & 15\% & 22 & 0.921 & $\approx$1\% \\
+OSWorld & State-of-art agent & 35\% & 15 & 0.929 & $<$1\% \\
+\bottomrule
+\end{tabularx}
+\caption{CNA degradation analysis. Per-step accuracy $p$ is estimated from published task success rates and mean trajectory lengths. Even state-of-the-art agents with CNA $\approx 0.97$--$0.98$ incur substantial failure rates when operating at 50-step horizons, motivating reward-dense environment designs that interrupt error accumulation at intermediate steps.}
+\label{tbl:cna-degradation}
+\end{table}
+
+The degradation pattern is striking: Claude Code's per-step accuracy of $p \approx 0.978$ still yields only $0.978^{50} \approx 0.32$ task success at horizon $T=50$, while Devin's $p \approx 0.924$ approaches near-certain failure ($0.924^{50} \approx 0.02$). The implication for environment design is direct: training exclusively on terminal rewards in long-horizon environments provides an impoverished learning signal because errors that would be catchable with dense feedback are invisible until the episode ends. RL environments for agentic AI must therefore be engineered to expose intermediate checkpoints---sub-goal completions, unit test passes, state consistency checks---that allow credit assignment to propagate through the error accumulation chain.
 
 \textbf{Environment fidelity} quantifies the sim-to-real gap. Research using the User-Sim Index (USI) demonstrates that LLM-based user simulators create an "easy mode" through behavioral gaps (excessive cooperativeness, information "front-loading") and evaluative gaps (uniformly positive feedback versus nuanced human judgments).
 

@@ -11,7 +11,8 @@ An arXiv white paper on **"The Environment Layer: Building Infrastructure for Ag
 Compile the PDF (run twice for correct TOC/references):
 ```bash
 cd /Users/fei/.openclaw/workspace/rl-paper
-pdflatex main.tex && pdflatex main.tex
+pdflatex -interaction=nonstopmode main.tex 
+ && pdflatex -interaction=nonstopmode main.tex 
 ```
 
 For bibliography:
