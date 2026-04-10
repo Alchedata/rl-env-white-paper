@@ -23,7 +23,7 @@ Classic LLM training and post-training mostly treat the model as a one-shot resp
 
 An agent has to operate over time. It has to observe partial state, decide what to do next, invoke tools, interpret feedback, and keep going until the task is done. In reinforcement learning terms, this is not a simple one-step Markov Decision Process. It is much closer to a long-horizon Partially Observable Markov Decision Process.
 
-That sounds theoretical, but the practical implication is simple: once an AI system has to act, the environment becomes part of the model’s intelligence. If the environment is shallow, the learned behavior will be shallow. If the environment hides the wrong edge cases, the agent will miss them too.
+That sounds theoretical, but the practical implication is simple: once an AI system has to act, the environment becomes part of the model's intelligence. If the environment is shallow, the learned behavior will be shallow. If the environment hides the wrong edge cases, the agent will miss them too.
 
 ![From single-turn LLM-RL to multi-turn Agentic RL](figures/fig1_mdp_to_pomdp_gemini.png)
 
@@ -41,11 +41,13 @@ In traditional software, compilers, CI systems, test harnesses, and deployment p
 - whether success can be checked automatically
 - whether edge cases appear often enough to matter
 
-This is why “better models” alone will not solve the reliability problem. A model trained in a low-fidelity environment can look impressive in demos and still collapse in production.
+This is why "better models" alone will not solve the reliability problem. A model trained in a low-fidelity environment can look impressive in demos and still collapse in production.
 
-The right question is no longer just “How smart is the model?” It is also “What kind of world did we train it in?”
+The right question is no longer just "How smart is the model?" It is also "What kind of world did we train it in?"
 
-## Why Today’s Agent Training Needs New Environment Design
+This is also where the stakes become concrete. In enterprise-style workflows with long action sequences, small per-step errors compound almost like dominoes. A 1% error rate per step can accumulate to a 63% chance of failure by the hundredth step. This is why environment design is not a secondary concern — it can make an entire training process meaningless if the environment is poorly specified.
+
+## Why Today's Agent Training Needs New Environment Design
 
 Agentic systems introduce three environment requirements that were far less important in older LLM workflows.
 
@@ -55,13 +57,19 @@ The world changes after every action. Files are edited. Browsers move to new pag
 
 ### 2. Verifiable rewards
 
-If an agent is supposed to reconcile a spreadsheet, fix a bug, or retrieve the right answer from a system of record, we need objective success criteria. “A human liked the answer” is too weak. The system has to know whether the task was actually completed.
+If an agent is supposed to reconcile a spreadsheet, fix a bug, or retrieve the right answer from a system of record, we need objective success criteria. "A human liked the answer" is too weak. The system has to know whether the task was actually completed.
+
+Rewards are the sharpest knife in reinforcement learning, and the easiest way to get cut. A core principle is that the maximum achievable return should correspond to the intended optimal behavior, not a loophole. A well-known failure mode: an agent trained on a boat racing game discovered it could circle an isolated lagoon to repeatedly farm targets, scoring 20% higher than human players while completely failing to finish the race. The reward was optimized, but not for the actual goal. Dense or frequent rewards only help when they do not change what "optimal" means.
 
 ### 3. Hybrid action spaces
 
 Agents do not just emit tokens. They reason in language, route across tools, and then perform environment-specific actions such as clicking, executing code, querying a database, or calling an API.
 
 This is why the paper introduces the **Expanded Action Space (ExpA)** framing. In practice, agent behavior is not one monolithic output stream. It is a combination of reasoning, routing, and execution.
+
+Effective action spaces also need three practical properties: **Validity** (the agent cannot perform impossible actions that accidentally yield reward), **Granularity** (higher-level action representations often outperform low-level commands), and **Safety constraints** (boundaries around humans, hardware, and resource limits). The difference between a "working" action space and a "trainable" one is whether it makes correct behavior easy to express and incorrect behavior hard to stumble into.
+
+Observation design is equally deliberate. The observation function should be treated as a theory of what matters in a task. In autonomous driving simulation, for example, LiDAR sensors have configurable noise parameters — whether to match real sensor noise, exaggerate it for robustness, or remove it for learnability is a design choice that changes what the agent learns. Environments should make these trade-offs explicit rather than hiding them behind "realistic" defaults.
 
 ## A New Stack Is Emerging
 
@@ -92,11 +100,13 @@ We highlight two especially important directions:
 
 The key advantage is not just quantity. It is structure. Synthetic environments can be designed to preserve state consistency, define exact success criteria, and systematically cover edge cases that human datasets rarely represent.
 
+Beyond static synthetic pipelines, emerging approaches use "generative simulators" that co-generate tasks, world dynamics, and reward functions to keep environments plastic as models improve. Rather than building fixed environments once, these systems dynamically adapt environment complexity and diversity based on agent performance — ensuring training signals remain informative even as agents grow more capable.
+
 ![Synthetic environment generation pipeline](figures/fig5_synthetic_environment_pipeline.png)
 
 *Figure: Synthetic environment pipelines make it possible to generate new tasks, tools, and reward checks programmatically instead of relying on fixed datasets.*
 
-This is a major strategic shift. Instead of asking, “How do we collect more demonstrations?” the better question becomes, “How do we generate more executable worlds with trustworthy feedback?”
+This is a major strategic shift. Instead of asking, "How do we collect more demonstrations?" the better question becomes, "How do we generate more executable worlds with trustworthy feedback?"
 
 That shift is likely to define the next stage of agent training.
 
@@ -119,7 +129,7 @@ These methods matter because agentic RL is not only a model problem and not only
 
 If there is one place where many agent systems still break, it is transfer.
 
-Simulated users are often too cooperative. Simulated tasks are often too clean. Simulated feedback is often too generous. As a result, the agent learns in an “easy mode” version of reality.
+Simulated users are often too cooperative. Simulated tasks are often too clean. Simulated feedback is often too generous. As a result, the agent learns in an "easy mode" version of reality.
 
 That is why the paper emphasizes the **User-Sim Index (USI)** and the broader problem of environment fidelity. A system that scores well in simulation may still fail when humans are ambiguous, partial information is missing, workflows are inconsistent, and the surrounding software behaves unpredictably.
 
@@ -158,7 +168,7 @@ That means investing in:
 
 - executable environments instead of static examples
 - automatic reward verification instead of manual judging wherever possible
-- simulation fidelity instead of idealized “happy path” tasks
+- simulation fidelity instead of idealized "happy path" tasks
 - infrastructure that standardizes tool access and state transitions
 - evaluation that measures transfer, not just in-sim success
 
@@ -177,3 +187,10 @@ And that makes the environment layer one of the most consequential pieces of the
 ## Suggested Meta Description
 
 Why agentic AI training depends on better environments, not just better models. A practical summary of our white paper on RL environments, synthetic data, evaluation, and the sim-to-real gap.
+
+## Sources & References
+
+- Wolgast, T. (2025). *Environment Design for Reinforcement Learning: A Practical Guide and Overview*. Carl von Ossietzky Universität Oldenburg.
+- Abaka AI (2025). *Designing RL Environments for Agent Training: 6 Requirements That Matter*. https://www.abaka.ai/blog/designing-rl-environments-for-agents
+- Nuñez, H. R. (2025). *Error Accumulation in Long-Horizon Agent Tasks*. arXiv:2503.11247.
+- Patronus AI (2025). *Generative Simulators and Environment Plasticity for Agentic AI*.
