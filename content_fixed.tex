@@ -47,6 +47,12 @@ This white paper provides a comprehensive analysis of the environment layer for 
 
 Section 11 concludes with a research agenda for next-generation RL environments. We argue that the path to production-ready agentic systems runs through the environment layer---and that investment in environment infrastructure will yield compounding returns across the entire Agentic AI stack.
 
+\subsection{Relationship to Prior Work}
+
+The closest work to ours is \citet{wolgast2025envdesign}, a January 2025 practitioner guide on RL environment design from the perspective of \emph{traditional} RL applied to physical systems (energy grids, robotics, locomotion). That work provides valuable low-level guidance on Gymnasium API usage, observation normalization, action-space shaping, and reward engineering---concerns that remain largely orthogonal to the challenges addressed here. Critically, it operates entirely within the classic MDP paradigm with numeric state vectors, atomic discrete or continuous actions, and single-step reward signals, and makes no reference to LLMs, language-conditioned agents, or the agentic AI stack.
+
+Our paper departs from \citeauthor{wolgast2025envdesign} in three fundamental ways. First, \emph{scope}: we target environments specifically designed for training \emph{language-model-based agents} executing long-horizon, multi-step tasks in digital and embodied settings---a regime where the environment must handle natural language observations, tool calls, and delayed, verifiable rewards, none of which appear in Gymnasium-style benchmarks. Second, \emph{theory}: we formalize agentic training as a POMDP over history-conditioned policies and introduce the Expanded Action Space (ExpA) framework that decouples language generation, routing decisions, and environment interactions---a distinction irrelevant for low-dimensional control tasks. Third, \emph{novelty}: we contribute original frameworks---EQF (Environment Quality: Fidelity, Diversity, Verifiability), CLASSic (Cost, Latency, Accuracy, Security, Stability), CLEAR (Cost-normalized accuracy), and the User-Sim Index (USI)---that quantify environment quality and production readiness for agentic systems. None of these constructs have analogues in prior environment-design literature, which has focused primarily on classical RL domains without language or agentic structure.
+
 \begin{figure}[tbp]
     \centering
     \begin{tikzpicture}[

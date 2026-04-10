@@ -1,4 +1,4 @@
-\begin{thebibliography}{55}
+\begin{thebibliography}{56}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -282,6 +282,13 @@ Jason Wei et~al.
 \newblock {RL} environments for agentic {AI}: Who will win the training \&
   verification layer by 2030.
 \newblock Technical report, Wing VC, 2026.
+
+\bibitem[Wolgast(2025)]{wolgast2025envdesign}
+Thomas Wolgast.
+\newblock Environment design for reinforcement learning: A practical guide and
+  overview.
+\newblock ResearchGate Whitepaper, January 2025.
+\newblock Carl von Ossietzky Universit\"{a}t Oldenburg, published January 2025.
 
 \bibitem[Xie et~al.(2024)]{xie2024osworld}
 Tianbao Xie et~al.
