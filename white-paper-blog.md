@@ -81,6 +81,10 @@ One sign that the field is maturing is that we are starting to see a recognizabl
 
 Together, these efforts point to something important: the industry is slowly building the equivalent of an operating system layer for agent training and execution.
 
+One active debate in this layer concerns the right interface between agents and tools. MCP (Model Context Protocol) promised to be the "USB-C port for AI" — a universal, schema-driven standard for tool exposure. But a practical counter-movement has emerged: using CLI tools directly instead of building MCP servers. The argument hinges on token efficiency (CLI requires no schema injection), pre-existing model knowledge (models already know git, docker, az, kubectl from training data), and natural composability through Unix pipes. In documented enterprise comparisons, CLI-based tool invocation has shown 10–35x lower token costs for equivalent tasks.
+
+The more likely outcome is not MCP vs. CLI winner-take-all, but stratified ecosystem design: CLI-first for developer-centric, efficiency-driven tooling; MCP for enterprise integrations where security, compliance, and cross-platform tool sharing are non-negotiable. Microsoft's mcp-cli hybrid approach reflects this reality — using CLI as the transport while preserving MCP-style dynamic tool discovery. What this means for environment designers is that tool interface choices are not merely implementation details — they shape what agents can efficiently learn and do.
+
 ![The agentic RL ecosystem stack](figures/fig4_agentic_rl_ecosystem_stack.png)
 
 *Figure: The environment layer sits between raw compute and higher-level agent systems. It is where interfaces, simulators, and evaluation substrates become standardized.*
