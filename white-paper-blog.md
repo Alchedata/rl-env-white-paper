@@ -25,7 +25,7 @@ An agent has to operate over time. It has to observe partial state, decide what 
 
 That sounds theoretical, but the practical implication is simple: once an AI system has to act, the environment becomes part of the model's intelligence. If the environment is shallow, the learned behavior will be shallow. If the environment hides the wrong edge cases, the agent will miss them too.
 
-![From single-turn LLM-RL to multi-turn Agentic RL](figures/fig1_mdp_to_pomdp_gemini.png)
+![From single-turn LLM-RL to multi-turn Agentic RL](blog-assets/paper-figures/mdp-to-pomdp.svg)
 
 *Figure: The jump from conventional LLM-RL to Agentic RL is a shift from static prompting to dynamic, multi-step interaction.*
 
@@ -85,7 +85,7 @@ One active debate in this layer concerns the right interface between agents and 
 
 The more likely outcome is not MCP vs. CLI winner-take-all, but stratified ecosystem design: CLI-first for developer-centric, efficiency-driven tooling; MCP for enterprise integrations where security, compliance, and cross-platform tool sharing are non-negotiable. Microsoft's mcp-cli hybrid approach reflects this reality — using CLI as the transport while preserving MCP-style dynamic tool discovery. What this means for environment designers is that tool interface choices are not merely implementation details — they shape what agents can efficiently learn and do.
 
-![The agentic RL ecosystem stack](figures/fig4_agentic_rl_ecosystem_stack.png)
+![The agentic RL ecosystem stack](blog-assets/paper-figures/ecosystem-stack.svg)
 
 *Figure: The environment layer sits between raw compute and higher-level agent systems. It is where interfaces, simulators, and evaluation substrates become standardized.*
 
@@ -106,7 +106,7 @@ The key advantage is not just quantity. It is structure. Synthetic environments 
 
 Beyond static synthetic pipelines, emerging approaches use "generative simulators" that co-generate tasks, world dynamics, and reward functions to keep environments plastic as models improve. Rather than building fixed environments once, these systems dynamically adapt environment complexity and diversity based on agent performance — ensuring training signals remain informative even as agents grow more capable.
 
-![Synthetic environment generation pipeline](figures/fig5_synthetic_environment_pipeline.png)
+![Synthetic environment generation pipeline](blog-assets/paper-figures/synthetic-pipeline.svg)
 
 *Figure: Synthetic environment pipelines make it possible to generate new tasks, tools, and reward checks programmatically instead of relying on fixed datasets.*
 
@@ -137,7 +137,7 @@ Simulated users are often too cooperative. Simulated tasks are often too clean. 
 
 That is why the paper emphasizes the **User-Sim Index (USI)** and the broader problem of environment fidelity. A system that scores well in simulation may still fail when humans are ambiguous, partial information is missing, workflows are inconsistent, and the surrounding software behaves unpredictably.
 
-![The sim-to-real gap in user simulation](figures/fig7_sim_to_real_gap.png)
+![The sim-to-real gap in user simulation](blog-assets/paper-figures/sim-to-real-gap.svg)
 
 *Figure: The difference between simulated and real-world interaction is not cosmetic. It changes what the agent learns and what it can transfer.*
 
