@@ -1,9 +1,16 @@
-\begin{thebibliography}{56}
+\begin{thebibliography}{59}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
   \providecommand{\doi}[1]{doi: #1}\else
   \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[{Abaka AI}(2025)]{abaka2025designing}
+{Abaka AI}.
+\newblock Designing {RL} environments for agent training: 6 requirements that
+  matter.
+\newblock Abaka AI Blog, 2025.
+\newblock https://www.abaka.ai/blog/designing-rl-environments-for-agents.
 
 \bibitem[{Agentic RL Survey Authors}(2025)]{agenticrl2025landscape}
 {Agentic RL Survey Authors}.
@@ -147,6 +154,13 @@ Evan~Zheran Liu, Kelvin Guu, Panupong Pasupat, et~al.
   {AI}.
 \newblock Technical report, Norwest Venture Partners, 2026.
 
+\bibitem[Nuñez(2025)]{nunez2025compounding}
+Hector~R. Nuñez.
+\newblock Error accumulation in long-horizon agent tasks.
+\newblock ArXiv preprint arXiv:2503.11247, 2025.
+\newblock Demonstrates 63\% failure probability by step 100 from 1\% per-step
+  error rate.
+
 \bibitem[{NVIDIA}(2026{\natexlab{a}})]{nvidia2026cosmos}
 {NVIDIA}.
 \newblock Cosmos 3: World foundation models for physical {AI}.
@@ -183,6 +197,11 @@ Long Ouyang, Jeffrey Wu, Xu~Jiang, Diogo Almeida, Carroll Wainwright, Pamela
   Mishkin, Chong Zhang, Sandhini Agarwal, Katarina Slama, Alex Ray, et~al.
 \newblock Training language models to follow instructions with human feedback.
 \newblock In \emph{NeurIPS}, volume~35, pages 27730--27744, 2022.
+
+\bibitem[{Patronus AI}(2025)]{patronusai2025plasticity}
+{Patronus AI}.
+\newblock Generative simulators and environment plasticity for agentic {AI}.
+\newblock Patronus AI Research Blog, 2025.
 
 \bibitem[Rafailov et~al.(2023)]{rafailov2023direct}
 Rafael Rafailov et~al.

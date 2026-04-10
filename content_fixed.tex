@@ -11,6 +11,8 @@ Traditional surveys of Agentic RL focus on model capabilities, algorithms, and a
 
 Consider the analogy to software development. Compilers, debuggers, and testing frameworks form the infrastructure layer that enables reliable software engineering. Similarly, RL environments form the infrastructure layer for training autonomous agents. Just as a compiler that fails to catch memory errors leads to unreliable software, an environment that fails to model edge cases leads to unreliable agents.
 
+This stakes are high: in enterprise-style workflows, long sequences with the wrong design can accumulate small per-step errors, creating almost a domino effect. Very quickly, a 1\% error rate per step can compound to a 63\% chance of failure by the hundredth step \citep{nunez2025compounding}. This observation underscores that environment design does not only have a strong impact on RL outcomes—it can make an entire training process useless if the environment is poorly specified.
+
 \subsection{Why Environments Matter More Than Ever}
 
 The shift from single-turn LLM interactions to multi-turn agentic behavior fundamentally changes environment requirements:
@@ -32,6 +34,8 @@ A critical challenge that has received insufficient attention is \textbf{environ
 \end{enumerate}
 
 Research using the User-Sim Index (USI) reveals that LLM-based user simulators often create an "easy mode" for agents, exhibiting behavioral gaps (excessive cooperativeness, information front-loading) and evaluative gaps (uniformly positive feedback). This sim-to-real gap represents a fundamental challenge: agents trained on low-fidelity environments may appear competent during training but fail catastrophically in deployment.
+
+Treating environments as a ``contract'' between algorithms and world dynamics is one practical approach to clarifying environment design responsibilities \citep{abaka2025designing}. This contract metaphor reinforces that the environment API defines the task precisely—not a proxy for the task, but the task itself. Gym-style APIs successfully encode this contract: \texttt{reset} initializes a task, \texttt{step} applies an action, and the environment returns the next observation plus a reward and termination signal.
 
 \subsection{Contributions and Paper Structure}
 
@@ -232,6 +236,8 @@ The observation function $\mathcal{O}(o_t | s_t, a_{t-1})$ formalizes the limite
 \end{enumerate}
 The belief state $b_t(s) = P(s_t = s | h_t)$ provides a probabilistic representation of the agent's uncertainty about the true environment state given its history. Optimal behavior in POMDPs often requires maintaining and updating this belief state, though LLM-based agents typically employ heuristic approximations through their context windows and reasoning capabilities.
 
+Observation design choices are themselves a theory of what matters in a task \citep{abaka2025designing}. This theory should be made explicit and normalized for stable learning, with noise or partiality added only when it improves transfer to the real deployment distribution. A practical example comes from autonomous-driving simulation: LiDAR sensors have explicit configurable parameters (e.g., number of channels, points per second), as well as explicit models for point drop-off and distance noise. Whether to match real sensor noise, exaggerate noise for robustness, or remove it for learnability is a deliberate design choice that changes what the agent learns.
+
 Table~\ref{tbl:llm-rl-vs-agentic} summarizes the core shift from preference-tuned, single-step language modeling to long-horizon agent-environment interaction.
 
 \begin{table}[htbp]
@@ -367,6 +373,8 @@ where the policy decomposes into routing, environment-specific, and language com
 \textbf{Interpretability}: The explicit separation of reasoning tokens ($\mathcal{A}_{\text{lang}}$) from action tokens ($\mathcal{A}_{\text{env}}$) enables process-level supervision and debugging. The agent's "thought process" becomes observable through its language actions, while its external effects are traceable through environment actions.
 
 \textbf{Safety}: Routing actions provide natural intervention points for guardrails and safety checks. Before executing $a_{\text{env}} \in \mathcal{A}_e$, the system can validate the action against environment-specific constraints.
+
+These design principles for action spaces connect directly to the practical requirements identified in agentic training environments \citep{abaka2025designing}: (1) \textbf{Validity} ensures the agent cannot perform impossible or meaningless actions that accidentally yield reward; (2) \textbf{Granularity} recognizes that higher-level action representations often outperform direct low-level commands; and (3) \textbf{Safety constraints} enforce boundaries around humans, hardware, and resource limits. The key difference between a ``working'' action space and a ``trainable'' one is not whether it is mathematically valid, but whether it makes correct behavior easy to express and incorrect behavior hard to stumble into.
 
 \subsubsection{Comparison with Traditional LLM-RL}
 
@@ -1478,6 +1486,8 @@ The convergence of AWM and RG addresses the dataset ceiling through several comp
 
 \textbf{Controlled Difficulty Progression:} Synthetic environments enable precise control over task difficulty, facilitating curriculum learning matching agent capabilities. This controlled progression maximizes learning efficiency by maintaining optimal challenge levels throughout training.
 
+\textbf{Environment Plasticity:} Beyond static synthetic pipelines, emerging approaches employ ``generative simulators'' that co-generate tasks, world dynamics, and reward functions to keep environments plastic as models improve \citep{patronusai2025plasticity}. These systems dynamically adapt environment complexity, diversity, and reward structure based on agent performance, ensuring training signals remain informative even as agents grow more capable.
+
 \subsection{Comparative Analysis: SQL-Backed vs. LLM-Simulated Environments}
 
 The design choice between SQL-backed environments (AWM) and LLM-simulated environments represents a fundamental trade-off in synthetic environment architecture:
@@ -1550,6 +1560,8 @@ The optimal approach in many applications is a hybrid architecture combining SQL
 
 
 Long-horizon agentic tasks present fundamental algorithmic challenges that extend beyond the scope of conventional reinforcement learning methods. When an agent must execute hundreds or thousands of sequential actions to achieve a goal, the sparse reward signal creates a severe credit assignment problem: determining which specific actions contributed to eventual success or failure becomes computationally intractable. This section examines recent algorithmic innovations designed to address these challenges, including critic-free optimization methods, hierarchical grouping strategies, hindsight credit assignment mechanisms, and dynamics-aware state representations.
+
+Rewards are the sharpest knife in RL, and the easiest way to get cut \citep{abaka2025designing}. A core principle is that the maximum achievable return should correspond to the intended optimal behavior, not to a loophole. The classic failure mode is reward hacking: an agent discovers unintended ways to maximize cumulative reward that violate the designer's intent. A well-known demonstration trained an agent on a boat racing game where hitting targets yields points but finishing the race is not directly rewarded. The learned policy discovered a strategy of circling an isolated lagoon to repeatedly farm targets; the agent's score was on average 20\% higher than human players, despite failing at the human-understood goal of finishing quickly. This example illustrates that optimization will exploit your proxy. Rewards should measure the outcome you actually want, not an easy-to-measure proxy. Use denser feedback only when you can argue it does not change what ``optimal'' means, and assume capable agents will search for loopholes.
 
 \subsection{The Credit Assignment Problem in Long-Horizon Tasks}
 
